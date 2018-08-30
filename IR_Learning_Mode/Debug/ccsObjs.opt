@@ -1,0 +1,1 @@
+"./FR4133_IR_BP_Learn.obj" "./HAL_FR4133LP_LCD.obj" "./HAL_FR4133LP_Learn_Board.obj" "../lnk_msp430fr4133.cmd" -llibc.a 

@@ -1,0 +1,38 @@
+
+**** Build of configuration Release for project IR Remote Test ****
+
+/Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
+ 
+Building file: "../LCD.c"
+Invoking: MSP430 Compiler
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx -O2 --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/IR Remote Test" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="LCD.d_raw"  "../LCD.c"
+"../LCD.c", line 117: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../LCD.c", line 133: remark #2553-D: (ULP 14.1) Array index (involving "pos") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 137: remark #2553-D: (ULP 14.1) Array index (involving "pos") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 142: remark #2553-D: (ULP 14.1) Array index (involving "pos") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 144: remark #2553-D: (ULP 14.1) Array index (involving "ch") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 145: remark #2553-D: (ULP 14.1) Array index (involving "pos") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 145: remark #2553-D: (ULP 14.1) Array index (involving "ch") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 171: remark #1530-D: (ULP 5.1) Detected modulo operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../LCD.c", line 173: remark #1530-D: (ULP 5.1) Detected divide operation(s). Recommend moving them to RAM during run time or not using as these are processing/power intensive
+"../LCD.c", line 182: remark #2553-D: (ULP 14.1) Array index (involving "pos") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 264: warning #225-D: function "strlen" declared implicitly
+"../LCD.c", line 273: warning #179-D: variable "buffer" was declared but never referenced
+"../LCD.c", line 268: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../LCD.c", line 269: remark #2553-D: (ULP 14.1) Array index (involving "i") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 269: remark #2553-D: (ULP 14.1) Array index (involving "i") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 275: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../LCD.c", line 276: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../LCD.c", line 277: remark #1545-D: (ULP 14.1) Array index of type "int". Recommend using "unsigned int"
+"../LCD.c", line 277: remark #2553-D: (ULP 14.1) Array index (involving "j") of type "int". Recommend using "unsigned int"
+"../LCD.c", line 280: remark #1527-D: (ULP 2.1) Detected SW delay loop using __delay_cycles. Recommend using a timer module instead
+Finished building: "../LCD.c"
+ 
+Building target: "IR Remote Test.out"
+Invoking: MSP430 Linker
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx -O2 --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"IR Remote Test.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="IR Remote Test_linkInfo.xml" --use_hw_mpy=none --rom_model -o "IR Remote Test.out" "./IR_Board.obj" "./LCD.obj" "./main.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
+<Linking>
+Finished building target: "IR Remote Test.out"
+ 
+
+**** Build Finished ****

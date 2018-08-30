@@ -1,0 +1,19 @@
+
+**** Build of configuration Debug for project IR_Emitter_and_Receiver ****
+
+/Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
+ 
+Building target: "IR_Emitter_and_Receiver.out"
+Invoking: MSP430 Linker
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"IR_Emitter_and_Receiver.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="IR_Emitter_and_Receiver_linkInfo.xml" --use_hw_mpy=none --rom_model -o "IR_Emitter_and_Receiver.out" "./FR4133_IR_BP_RX.obj" "./FR4133_IR_BP_TX.obj" "./HAL_FR4133LP_Board.obj" "./HAL_FR4133LP_LCD.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
+<Linking>
+error #10056: symbol "main" redefined: first defined in "./FR4133_IR_BP_RX.obj"; redefined in "./FR4133_IR_BP_TX.obj"
+error #10010: errors encountered during linking; "IR_Emitter_and_Receiver.out" not built
+gmake[1]: *** [IR_Emitter_and_Receiver.out] Error 1
+ 
+>> Compilation failure
+makefile:142: recipe for target 'IR_Emitter_and_Receiver.out' failed
+gmake: *** [all] Error 2
+makefile:138: recipe for target 'all' failed
+
+**** Build Finished ****

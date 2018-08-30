@@ -1,0 +1,40 @@
+
+**** Build of configuration Debug for project IR_Learning_Mode ****
+
+/Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
+ 
+Building file: "../HAL_FR4133LP_Learn_Board.c"
+Invoking: MSP430 Compiler
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/IR_Learning_Mode" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="HAL_FR4133LP_Learn_Board.d_raw"  "../HAL_FR4133LP_Learn_Board.c"
+"../HAL_FR4133LP_Learn_Board.c", line 63: remark #1527-D: (ULP 2.1) Detected SW delay loop using __delay_cycles. Recommend using a timer module instead
+"../HAL_FR4133LP_Learn_Board.c", line 140: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../HAL_FR4133LP_Learn_Board.c", line 145: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../HAL_FR4133LP_Learn_Board.c", line 161: remark #1540-D: (ULP 11.2) Assignment of higher bits (constants) to "PADIR_H" within a loop. Recommend using lower 4 bits to allow use of constant generators
+"../HAL_FR4133LP_Learn_Board.c", line 177: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../HAL_FR4133LP_Learn_Board.c", line 180: remark #1545-D: (ULP 14.1) Array index of type "int". Recommend using "unsigned int"
+"../HAL_FR4133LP_Learn_Board.c", line 187: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+Finished building: "../HAL_FR4133LP_Learn_Board.c"
+ 
+Building file: "../FR4133_IR_BP_Learn.c"
+Invoking: MSP430 Compiler
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/IR_Learning_Mode" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="FR4133_IR_BP_Learn.d_raw"  "../FR4133_IR_BP_Learn.c"
+"../FR4133_IR_BP_Learn.c", line 119: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
+"../FR4133_IR_BP_Learn.c", line 150: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
+"../FR4133_IR_BP_Learn.c", line 240: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../FR4133_IR_BP_Learn.c", line 243: remark #1527-D: (ULP 2.1) Detected SW delay loop using __delay_cycles. Recommend using a timer module instead
+"../FR4133_IR_BP_Learn.c", line 256: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../FR4133_IR_BP_Learn.c", line 257: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function scan_key. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../FR4133_IR_BP_Learn.c", line 258: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function IR_Mode_Setting. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../FR4133_IR_BP_Learn.c", line 271: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../FR4133_IR_BP_Learn.c", line 272: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function scan_key. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+"../FR4133_IR_BP_Learn.c", line 273: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function IR_Mode_Setting. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+Finished building: "../FR4133_IR_BP_Learn.c"
+ 
+Building target: "IR_Learning_Mode.out"
+Invoking: MSP430 Linker
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"IR_Learning_Mode.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="IR_Learning_Mode_linkInfo.xml" --use_hw_mpy=none --rom_model -o "IR_Learning_Mode.out" "./FR4133_IR_BP_Learn.obj" "./HAL_FR4133LP_LCD.obj" "./HAL_FR4133LP_Learn_Board.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
+<Linking>
+Finished building target: "IR_Learning_Mode.out"
+ 
+
+**** Build Finished ****

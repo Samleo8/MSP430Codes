@@ -1,0 +1,40 @@
+/***************************
+ * MAIN.H
+ * Use this header file to attach functions and define constants
+****************************/
+
+#include "msp430fr4133.h"
+
+//FRAM READING AND WRITING
+extern const char FRAM_START_ADDRESSES[] = { 0xE000, 0xE400 , 0xE800 };
+                        /* NOTE: 0xE000 to 0xE1000 is 256 bits.
+                         *       Playing safe with 0xE400 (difference of 1024 bits)
+                         *       This ensures that when writing the IR signals, they don't override that of another mode.
+                         *       TODO: Be exact with bit difference, and partion memory so that it doesn't overlap with code and other variables
+                         */
+
+#define MAX_ADC_CHANNEL 16
+
+//Button Debounce
+#define BUTTON_READY (0)
+#define BUTTON_PRESSED (1)
+
+//Number parsing
+enum boolean {
+    FALSE,
+    TRUE
+};
+
+/*
+#define TRUE (0xFF)
+#define FALSE (0x00)
+*/
+
+#define ABS(n) (n>0)?n:-n
+#define MAX(m,n) (m>n)?m:n
+#define MIN(m,n) (m<n)?m:n
+
+
+void Init_GPIO(void);
+void Init_Clock(void);
+void Init_ADC(void);

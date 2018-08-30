@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;LCD Test&apos; to &apos;LCD and ADC Test&apos;" description="Rename resource &apos;LCD Test&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/LCD Test" name="LCD and ADC Test" stamp="1535103052275" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;IR Remote Test&apos; to &apos;FRAM and Keypad Test&apos;" description="Rename resource &apos;IR Remote Test&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/IR Remote Test" name="FRAM and Keypad Test" stamp="1535104971004" updateReferences="true"/>
+</session>

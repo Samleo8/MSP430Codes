@@ -1,0 +1,9 @@
+
+**** Build of configuration Release for project LCD Test ****
+
+/Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
+ 
+gmake[1]: 'LCD Test.out' is up to date.
+gmake[1]: Nothing to be done for 'secondary-outputs'.
+
+**** Build Finished ****

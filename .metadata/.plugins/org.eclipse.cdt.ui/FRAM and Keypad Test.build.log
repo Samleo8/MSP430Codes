@@ -1,0 +1,13 @@
+
+**** Build of configuration Release for project FRAM and Keypad Test ****
+
+/Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
+ 
+Building target: "FRAM and Keypad Test.out"
+Invoking: MSP430 Linker
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx -O2 --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"FRAM and Keypad Test.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="FRAM and Keypad Test_linkInfo.xml" --use_hw_mpy=none --rom_model -o "FRAM and Keypad Test.out" "./IR_Board.obj" "./LCD.obj" "./main.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
+<Linking>
+Finished building target: "FRAM and Keypad Test.out"
+ 
+
+**** Build Finished ****

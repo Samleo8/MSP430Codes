@@ -1,0 +1,8 @@
+
+**** Build of configuration Release for project PWM Test ****
+
+/Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
+ 
+gmake[1]: 'PWM Test.out' is up to date.
+
+**** Build Finished ****

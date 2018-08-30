@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;LCD Test/temperature.c&apos; to &apos;TempSensor.c&apos;" description="Rename resource &apos;temperature.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="temperature.c" name="TempSensor.c" stamp="1529231489108" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;LCD Test/TempSensor&apos; to &apos;TempSensor.h&apos;" description="Rename resource &apos;TempSensor&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="TempSensor" name="TempSensor.h" stamp="1529231514745" updateReferences="true"/>
+</session>
