@@ -2,29 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="tx_cnt" key="selection"/>
+		<item value="BlinkLED" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="blinkLed"/>
+			<item value="delay"/>
+			<item value="BlinkLED"/>
+			<item value="LCD_Text"/>
 			<item value="tx_cnt"/>
-			<item value="TA0IV"/>
-			<item value="button"/>
-			<item value="buttonDebounce"/>
-			<item value="showChar"/>
-			<item value="IR"/>
+			<item value="none"/>
+			<item value="IR_Mode_Setting"/>
+			<item value="LCD_text"/>
+			<item value="LCD_Text( (char *)(MODE_NAMES[mode]) );"/>
 			<item value="mode"/>
-			<item value="init_adc"/>
-			<item value="MCLK"/>
-			<item value="LCD_Clear"/>
-			<item value="pragma"/>
-			<item value="button_num"/>
-			<item value="button)num"/>
-			<item value="index_to_keypad_num"/>
-			<item value="scan_key"/>
+			<item value="aircon"/>
+			<item value="DISABLED"/>
+			<item value="disabled"/>
+			<item value="transmit"/>
+			<item value="IR_status = "/>
 		</list>
 		<list key="replacehistory">
+			<item value="DISABLED"/>
 			<item value="LCD_Digit"/>
 			<item value="LCD_Letter"/>
 			<item value="MotorPowers"/>

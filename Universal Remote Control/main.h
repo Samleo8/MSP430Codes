@@ -36,4 +36,3 @@ void Init_Clock(void);
 void Init_ADC(void);
 
 void IR_Mode_Setting(void);
-void BlinkLED(void);

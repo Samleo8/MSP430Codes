@@ -7,7 +7,6 @@
  *	Init_Clock: Initializes XT1 OSC and DCO
  *	Init_ADC: Initializes ADC (NOT USED; TODO: Remove unless using temp function)
  *
- *	Blink_LED: Blinks green LED 8 times
  *	IR_Mode_Setting: Sets mode for IR mode accordingly
  * 
  * Connects to: 
@@ -21,6 +20,7 @@
  * 	                When not debugging and the jumper still in, however, the 3rd column will still work.
  *
  * 	NOTE: To support one byte enums, change Properties > Advanced > Runtime options > enum to "packed"
+ * 	      Change CCS Project Properties -> Debug -> MSP430 Properties -> Download Options -> Erase Options to "Erase and download necessary segements only (Differential Download)"
 ****************************/
 
 #include "main.h"
@@ -29,16 +29,16 @@
 
 extern const unsigned char POS[7];
 
-unsigned int channel = MAX_ADC_CHANNEL;
+unsigned char channel = MAX_ADC_CHANNEL;
 
-enum boolean intro = TRUE;
+enum boolean intro = FALSE; //NOTE: Make this 'FALSE' if you don't want the intro.
 
 //IR Keypad Buttons
 unsigned char button_num = TOTAL_KEYS+1;     //button number
 unsigned char buttonDebounce = BUTTON_READY;
 
 //Appliance modes
-static const char* MODE_NAMES[] = { "AIRCON", "TV 1", "TV 2" };
+const char* MODE_NAMES[] = { "AIRCON", "TV 1", "TV 2" };
 enum MODES {
     AIRCON,
     TV1,
@@ -59,7 +59,7 @@ unsigned char   code_num = 0;
 enum boolean copy_mode;
 
 //RX,TX and Timer Counters
-#pragma PERSISTENT(rx_cnt);     //store rx_cnt in FRAM
+#pragma PERSISTENT(rx_cnt);     //store rx_cnt in FRAM | TODO: Better partition memory? Seems like the error comes from there
 unsigned int    rx_cnt[3][14]={0}; //received bit counter
 unsigned int    tx_cnt=1;       //transmitted bit counter
 
@@ -68,11 +68,10 @@ unsigned int    old_cnt=0;      //old timer counter
 unsigned int    time_cnt=0;     //time interval between two edges
 
 //FRAM Writing and Reading
-const unsigned int FRAM_START_ADDRESSES[] = { 0xE000, 0xE400 , 0xE800 };
-/* NOTE: 0xE000 to 0xE1000 is 256 bits.
- *       Playing safe with 0xE400 (difference of 1024 bits)
+const unsigned int FRAM_START_ADDRESSES[] = { 0xE000, 0xE102 , 0xE204 };
+/* NOTE: 0xE000 to 0xE1000 is 256 addresses. (maximum of exactly 256 addresses will be used)
+ *       Difference between each start address is 258, just to be safe
  *       This ensures that when writing the IR signals, they don't override that of another mode.
- *       TODO: Be exact with bit difference, and partion memory so that it doesn't overlap with code and other variables
  */
 
 unsigned int *FRAM_write_ptr = (unsigned int *)(0xE000);
@@ -115,19 +114,46 @@ int main(void){
     LCD_Text( (char *)(MODE_NAMES[mode]) );
 
     while(1) {
-        if(copy_mode == TRUE && IR_status == RECEIVING) {
-            TA0CTL = TASSEL_2 + MC_2 + TACLR;   //SMCLK, Continuous mode
-            TA0CCTL2=CM_3+SCS+CCIS_0+CAP+CCIE;  //set TA0.2 control register choose CCIxA
-            while(IR_status == RECEIVING);
-            TA0CTL = 0;
-            TA0CCTL2 = 0;
+        if(copy_mode == TRUE){
+            if(IR_status == RECEIVING) {
+                /* USER ASKS TO RECEIVE; BEGIN COPYING OVER THE SIGNAL
+                 * 1. Start TA0.2 timer to enable the receive
+                 * 2. Write to FRAM in the TA0.2 interrupt
+                 * 3. Enter LPM3 to pause until the receive is complete
+                 * 4. In the TA0.2 interrupt, when receiving is maxed out, or a button is pressed, it will flag as IR_status = disabled, and exit LPM3
+                 * 5. Timer stops and code continues (actually it just enters LPM3 again).
+                 */
+
+                TA0CTL = TASSEL_2 + MC_2 + TACLR;   //SMCLK, Continuous mode
+                TA0CCTL2=CM_3+SCS+CCIS_0+CAP+CCIE;  //set TA0.2 control register choose CCIxA
+
+                // Pause by entering LPM3 until receiving complete.
+                // note that button interrupt cannot cause it to exit out of LPM3 because P1/2 interrupts have been disabled
+                //while(IR_status == RECEIVING);
+                __bis_SR_register(LPM3_bits | GIE);     //enter LPM3
+
+                TA0CTL = 0;
+                TA0CCTL2 = 0;
+            }
+            else{
+                //Waiting for user to press button to copy signal to
+            }
         }
         else if(copy_mode == FALSE && IR_status == TRANSMITTING)
         {
-            // Configure IR output pin
-            P1SEL0|= BIT0;                      // use internal IR modulator
+            /* USER ASKS TO TRANSMIT; BEGIN SENDING THE SIGNAL
+             * 1. Configure IR output pins
+             * 2. Disable all P1/2 interrupts: Prevents unwanted exit of LPM3 in the middle of signal send
+             * 3. Configure IR modulation using ASK protocol
+             * 3. Enter LPM3 to pause until the transmit is complete
+             * 4. In the TA0.0 interrupt, when transmit is complete, exits LPM3.
+             * 5. Stop all timers, renable interrupts and continue code (actually enters LPM3 again).
+             */
 
-            // disable Port1 & Port2 interrupt
+            // Configure IR output pin
+            P1SEL0 |= BIT0;                      // use internal IR modulator
+
+            // Disable Port1 & Port2 interrupt
             P1IE = 0;
             P2IE = 0;
 
@@ -148,10 +174,11 @@ int main(void){
             TA1CTL = TASSEL_2 + MC_1 + TACLR;   //SMCLK, UP mode
             TA0CTL = TASSEL_2 + MC_1 + TACLR;   //SMCLK, UP mode
 
-            // stop until the end of IR code
-            while(IR_status == TRANSMITTING);
+            // stop until the end of IR code by entering LPM3
+            // button interrupts MUST be disabled so it doesn't accidentally cause LPM3 exit
+            __bis_SR_register(LPM3_bits | GIE);
 
-            // disable timer 0 and 1
+            // Transmission complete: disable timer 0 and 1
             TA0CCTL0 = 0;
             TA0CCTL2 = 0;
             TA0CTL = 0;
@@ -163,11 +190,12 @@ int main(void){
             TA1CCR0 = 0;
             TA1CCR2 = 0;
 
-            // renable push button and keypad interrupt
+            // Renable push button and keypad interrupt
             P1IE |= (BIT2 | BIT3 | BIT4 | BIT5);
             P2IE |= (BIT6 | BIT7);
         }
         else{
+            //Idle
             //LCD_Text( (char*)(MODE_NAMES[mode]) );
         }
         __bis_SR_register(LPM3_bits | GIE);     //enter low power mode
@@ -175,7 +203,7 @@ int main(void){
 }
 
 
-void IR_Mode_Setting() {
+void IR_Mode_Setting(){
     if(intro == TRUE) return;
 
     LCD_Clear();
@@ -190,29 +218,36 @@ void IR_Mode_Setting() {
         {
             copy_mode = FALSE; //Move out of copy mode into emitting mode
         }
+
         LCD_Text("OK");
         IR_status = DISABLED;
+
+        P4OUT &= ~(BIT0);
     }
     else if(button_num > 2){ //Codeable button pressed
         code_num = button_num - 3;
 
         if(copy_mode == TRUE){  //copy mode => Perform copy
-            BlinkLED();
+            P4OUT |= (BIT0);
+
             FRAM_write_ptr = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM write address
             SYSCFG0 &= ~PFWP;
             rx_cnt[mode][code_num] = 0;
             SYSCFG0 |= PFWP;
+
             IR_status = RECEIVING;
         }
         else{ //transmit mode => Perform transmit
             if(rx_cnt[mode][code_num] > 0) {  // valid IR code
-               LCD_Text("SEND");
+                LCD_IR_Buttons(button_num);
+                IR_status = TRANSMITTING;
             }
             else {                           // no IR code
                 LCD_Text("NONE");
+                IR_status = DISABLED;
             }
+
             FRAM_read_ptr  = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM read address
-            IR_status = TRANSMITTING;
         }
     }
     else{
@@ -345,19 +380,6 @@ void Init_ADC(){
     TA1CCTL1 |= OUTMOD_7; //OUTPUT MODE 7 (Reset/set)
     TA1CCTL1 &= ~(CCIE | CCIFG); //DISABLE NTERRUPTS, CLEAR FLAG
     TA1CCR1 = 0x1000; //COMPARE VALUE
-}
-
-/* BlinkLED Function
- * - Blinks GREEN 4.0 LED 4 times
- */
-void BlinkLED ()
-{
-    unsigned char i=8;
-    while(i-- > 0){
-        P4OUT ^= BIT0;
-        __delay_cycles(200000);
-    }
-    P4OUT &= ~BIT0;
 }
 
 /* PORT1 Interrupt Service Routine
@@ -509,33 +531,41 @@ __interrupt void ADC_ISR(void) {
  *
  */
 
-//********Timer0 interrupt ISR*********//
+//********Timer0.0 interrupt ISR*********//
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR (void)
 {
     switch( TA0IV )
     {
         case TA0IV_NONE:
-            if(tx_cnt < rx_cnt[mode][code_num]){
+            if(tx_cnt < rx_cnt[mode][code_num]){ //Transmitting
+                P4OUT |= BIT0;
+
                 TA0CCTL2 ^= OUT;
                 TA0CCR0 = *(FRAM_read_ptr+1);   //update emitting IR code
                 *FRAM_read_ptr++;
                 tx_cnt++;
             }
-            else{
+            else{ //Complete
+                P4OUT &= ~BIT0;
+
                 IR_status = DISABLED;   //disable IR
                 TA0CCTL0 &= ~CCIE;      // disable timer_A0 interrupt
                 tx_cnt = 1;
+
+                LCD_Text( (char *)(MODE_NAMES[mode]) );
+
+                __delay_cycles(800000); //TODO: Start a timer and use the timer interrupt to exit LPM3 instead
+                __bic_SR_register_on_exit(LPM3_bits);                // Exit LPM3
             }
             break;
         default: break;
     }
 }
 
-//********Timer1 interrupt ISR*********//
+//********Timer 0.1 and 0.2 interrupt ISR*********//
 #pragma vector = TIMER0_A1_VECTOR
-__interrupt void TIMER0_A1_ISR (void)
-{
+__interrupt void TIMER0_A1_ISR (void) {
     switch(__even_in_range(TA0IV,TA0IV_TAIFG)) {
         case TA0IV_NONE: break;
         case TA0IV_TACCR1: //TA0.1
@@ -555,6 +585,17 @@ __interrupt void TIMER0_A1_ISR (void)
                 SYSCFG0 |= PFWP;
 
                 FRAM_write_ptr++;
+
+                P4OUT |= BIT0;
+                P1OUT &= ~BIT0;
+            }
+            else{
+                //No longer receiving anything...
+                P1OUT |= BIT0;
+                P4OUT &= ~BIT0;
+
+                //IR_status = DISABLED;
+                //__bic_SR_register_on_exit(LPM3_bits); //Exit LPM3
             }
             break;
         case TA0IV_TAIFG:

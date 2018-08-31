@@ -92,12 +92,9 @@ void LCD_Init()
 
 	LCDCTL0 = LCDSSEL_0 | LCDDIV_7;                  // flcd ref freq is xtclk
 
-	//LCD Operation - Mode 2, internal 3.08v, charge pump 256Hz
-	LCDVCTL = LCDCPEN | LCDSELVDD | VLCD_8 | (LCDCPFSEL0 | LCDCPFSEL1 | LCDCPFSEL2 | LCDCPFSEL3);
-	/*
-	// LCD Operation - Mode 3, internal 3.08v, charge pump 256Hz
-	LCDVCTL = LCDCPEN | LCDREFEN | VLCD_8 | (LCDCPFSEL0 | LCDCPFSEL1 | LCDCPFSEL2 | LCDCPFSEL3);
-	 */
+	//LCD Operation - Mode 2, internal 2.96v, charge pump 256Hz
+	LCDVCTL = LCDCPEN | LCDSELVDD | VLCD_6 | (LCDCPFSEL0 | LCDCPFSEL1 | LCDCPFSEL2 | LCDCPFSEL3);
+
 	LCDMEMCTL |= LCDCLRM;                             // Clear LCD memory
 
 	LCDCSSEL0 = 0x000F;                               // Configure COMs and SEGs
@@ -111,12 +108,14 @@ void LCD_Init()
 
 }
 
-// Clear all the LCD display
+// Clear the LCD segments
 void LCD_Clear()
 {
 	unsigned char i = 18;
 	while(i--)
 		LCDMEM[i+2] = 0x00;
+
+    //LCDMEMCTL |= LCDCLRM;   //Actually clear LCD memory
 }
 
 // LCD digit display function
@@ -295,6 +294,7 @@ void LCD_Text(char *msg){
             LCD_Letter( (i+j<len)?msg[i+j]:' ', POS[j+1]);
         }
 
+        //TODO: Instead of delay cycles, use a timer.
         __delay_cycles(2000000); //8000000 delay is 1s => this delay is 0.25s
 
         LCD_Clear();

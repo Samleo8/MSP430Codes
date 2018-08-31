@@ -28,7 +28,7 @@
 unsigned char key_num = 0;
 unsigned char compare = 0;
 
-void Init_KeypadIO(){
+void Init_KeypadIO() {
     // Configure Keypad GPIO
     //  KEYPAD IN  = { 1.3 , 1.4 , 1.5 , 2.7 };
     //  KEYPAD OUT = { 8.1 , 1.1 , 8.0 , 2.5 };
@@ -92,7 +92,7 @@ unsigned char scan_key(void)
 
     keycol = BIT0;
 
-    for (i = 0 ; i < KEYPAD_COLS ; i ++){
+    for (i=0;i<KEYPAD_COLS;i++) {
         P8DIR &= ~(BIT0 + BIT1);
         P1DIR &= ~BIT1;
         P2DIR &= ~BIT5;
@@ -124,8 +124,7 @@ unsigned char scan_key(void)
             row_sel|=0x01;
         keyrow = BIT3;
 
-        for (j = 0 ; j< KEYPAD_ROWS ; j++)
-        {
+        for (j=0;j<KEYPAD_ROWS;j++){
             if ((row_sel & keyrow) == 0)
                 key_array[(j + i * KEYPAD_ROWS  + 1)] = 1;
             keyrow = keyrow >> 1;
@@ -134,10 +133,12 @@ unsigned char scan_key(void)
         row_sel=0;
     }
 
-    for ( i=0 ; i<=TOTAL_KEYS; i++) // get pressed button number
-    {
-        if (key_array[i])
+    i = TOTAL_KEYS+1;
+    while(i--) { // get pressed button number
+        if (key_array[i]) {
             key_num = i;
+            break;
+        }
     }
 
     P8DIR |= BIT0 + BIT1; //Set P8.0/8.1/1.1/2.5 as keypad output
@@ -151,7 +152,7 @@ unsigned char scan_key(void)
 }
 //*/
 
-unsigned int index_to_keypad_num(unsigned char ind){
+unsigned int index_to_keypad_num(unsigned char ind) {
     switch(ind){
         case 6: return 9;
         case 7: return 6;
@@ -175,8 +176,7 @@ unsigned int index_to_keypad_num(unsigned char ind){
 
 // Sets up the WDT as a button debouncer, only activated once a
 // button interrupt has occurred.
-void Buttons_startWDT()
-{
+void Buttons_startWDT() {
     // WDT as 250ms interval counter
     SFRIFG1 &= ~WDTIFG;
     WDTCTL = WDTPW + WDTSSEL_1 + WDTTMSEL + WDTCNTCL + WDTIS_5;
@@ -186,8 +186,7 @@ void Buttons_startWDT()
 
 // Handles Watchdog Timer interrupts.
 #pragma vector=WDT_VECTOR
-__interrupt void WDT_ISR(void)
-{
+__interrupt void WDT_ISR(void) {
     if(buttonDebounce == BUTTON_PRESSED) {
         buttonDebounce = BUTTON_READY; //button has cooled down
 
