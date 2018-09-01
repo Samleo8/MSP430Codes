@@ -3,31 +3,10 @@
 
 /Applications/ti/ccsv8/utils/bin/gmake -k -j 3 all -O 
  
-Building file: "../main.c"
-Invoking: MSP430 Compiler
-"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/Universal Remote Control" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
-"../main.c", line 305: remark #1527-D: (ULP 2.1) Detected SW delay loop using __delay_cycles. Recommend using a timer module instead
-"../main.c", line 405: warning #190-D: enumerated type mixed with another type
-"../main.c", line 398: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 407: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function LCD_Text. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 420: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 421: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function scan_key. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 422: remark #1538-D: (ULP 10.1) ISR PORT1_ISR calls function IR_Mode_Setting. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 462: warning #190-D: enumerated type mixed with another type
-"../main.c", line 455: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 464: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function LCD_Text. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 474: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 475: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function scan_key. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 476: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function IR_Mode_Setting. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 549: remark #1538-D: (ULP 10.1) ISR TIMER0_A0_ISR calls function LCD_Text. Recommend moving function call away from ISR, or inlining the function, or using pragmas
-"../main.c", line 551: remark #1527-D: (ULP 2.1) Detected SW delay loop using __delay_cycles. Recommend using a timer module instead
-Finished building: "../main.c"
- 
 Building target: "Universal Remote Control.out"
 Invoking: MSP430 Linker
 "/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"Universal Remote Control.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="Universal Remote Control_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Universal Remote Control.out" "./IR_Board.obj" "./LCD.obj" "./main.obj" "../lnk_msp430fr4133.cmd"  -llibc.a 
 <Linking>
-warning #10229-D: output section ".data" refers to load symbol "$C$SL1" and hence cannot be compressed; compression "lzss" is ignored
 Finished building target: "Universal Remote Control.out"
  
 

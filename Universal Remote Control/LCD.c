@@ -22,12 +22,12 @@
 #include "msp430fr4133.h"
 #include "main.h"
 #include "LCD.h"
-#include "string.h"
+//#include "string.h"
 
-const unsigned char POS[7] = {0, pos1, pos2, pos3, pos4, pos5, pos6};
+static const unsigned char POS[7] = {0, pos1, pos2, pos3, pos4, pos5, pos6};
 
 //LCD digit display table
-const char digit[10] =
+static const char digit[10] =
 {
 		0xFC,  /* "0" */
 		0x60,  /* "1" */
@@ -42,7 +42,7 @@ const char digit[10] =
 };
 
 //LCD alphabet display table
-const char alphabet[28][2] =
+static const char alphabet[28][2] =
 {
 		{0xEF, 0x00},  /* "A" */ //0
 		{0xF1, 0x50},  /* "B" */ //1
@@ -274,7 +274,10 @@ void LCD_IR_Buttons(unsigned char btn) {
 }
 
 void LCD_Text(char *msg){
-    unsigned int len = strlen(msg);
+    //unsigned int len = strlen(msg);
+    unsigned int len = 0;
+    while(msg[len]!='\0') len++; //gets length of string (didn't want to include heavy string.h library just for strlen)
+
     unsigned char i,j;
 
     LCD_Clear();

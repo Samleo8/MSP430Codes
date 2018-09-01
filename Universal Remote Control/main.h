@@ -13,15 +13,9 @@
 #define BUTTON_PRESSED (1)
 
 //Number parsing
-enum boolean {
-    FALSE,
-    TRUE
-};
-
-/*
+typedef unsigned char boolean;
 #define TRUE (0xFF)
 #define FALSE (0x00)
-*/
 
 #define ABS(n) (n>0)?n:-n
 #define MAX(m,n) (m>n)?m:n

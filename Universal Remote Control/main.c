@@ -5,7 +5,6 @@
  * Functions:
  *  	Init_GPIO: Initializes ports
  *	Init_Clock: Initializes XT1 OSC and DCO
- *	Init_ADC: Initializes ADC (NOT USED; TODO: Remove unless using temp function)
  *
  *	IR_Mode_Setting: Sets mode for IR mode accordingly
  * 
@@ -14,28 +13,32 @@
  * 		IR_Board.c/h
  *
  *
- * 	IMPORTANT NOTE: Disconnect the UART RX Jumper on the Launchpad for the "3,6,9,Cool" column to work.
+ * 	NOTE: Disconnect the UART RX Jumper on the Launchpad for the "3,6,9,Cool" column to work.
  * 	                BUT only do so after debugging, or CCS will say "No USB FET found".
  *
  * 	                When not debugging and the jumper still in, however, the 3rd column will still work.
  *
  * 	NOTE: To support one byte enums, change Properties > Advanced > Runtime options > enum to "packed"
- * 	      Change CCS Project Properties -> Debug -> MSP430 Properties -> Download Options -> Erase Options to "Erase and download necessary segements only (Differential Download)"
+ * 	      Change Properties -> Debug -> MSP430 Properties -> Download Options -> Erase Options to "Erase and download necessary segements only (Differential Download)"
 ****************************/
 
 #include "main.h"
 #include "LCD.h"
 #include "IR_Board.h"
 
-extern const unsigned char POS[7];
+//extern const unsigned char POS[7];
 
-unsigned char channel = MAX_ADC_CHANNEL;
-
-enum boolean intro = FALSE; //NOTE: Make this 'FALSE' if you don't want the intro.
+//boolean intro = FALSE; //NOTE: Make this 'FALSE' if you don't want the intro.
 
 //IR Keypad Buttons
 unsigned char button_num = TOTAL_KEYS+1;     //button number
 unsigned char buttonDebounce = BUTTON_READY;
+
+/*  TODO: Somehow allow for at least 3 modes by compressing the TX data
+ *      - Change the time difference to unsigned char
+ *      - Store the time difference as a fraction/multiple of the period, thus allowing for storing as unsigned char
+ *      - Compress the format by which it is sent?
+ */
 
 //Appliance modes
 const char* MODE_NAMES[] = { "AIRCON", "TV 1", "TV 2" };
@@ -44,7 +47,8 @@ enum MODES {
     TV1,
     TV2
 } mode = AIRCON;
-#define TOTAL_MODES 3
+#define TOTAL_MODES 1
+#define TOTAL_CODES 14
 
 //IR mode/status
 enum IR_STATE {
@@ -56,33 +60,38 @@ enum IR_STATE {
 unsigned char   code_num = 0;
 
 //Copy mode
-enum boolean copy_mode;
+boolean copy_mode;
 
 //RX,TX and Timer Counters
-#pragma PERSISTENT(rx_cnt);     //store rx_cnt in FRAM | TODO: Better partition memory? Seems like the error comes from there
-unsigned int    rx_cnt[3][14]={0}; //received bit counter
-unsigned int    tx_cnt=1;       //transmitted bit counter
+#define MAX_IR_CNT 255
+
+#pragma PERSISTENT(rx_cnt);     //store rx_cnt in FRAM | TODO: Better partition memory
+unsigned char    rx_cnt[TOTAL_MODES][TOTAL_CODES]={0}; //received bit counter (unsigned char is good enough since the max size of the count is 255
+unsigned char    tx_cnt=1;          //transmitted bit counter
 
 unsigned int    new_cnt=0;      //new timer counter
 unsigned int    old_cnt=0;      //old timer counter
-unsigned int    time_cnt=0;     //time interval between two edges
 
 //FRAM Writing and Reading
-const unsigned int FRAM_START_ADDRESSES[] = { 0xE000, 0xE102 , 0xE204 };
-/* NOTE: 0xE000 to 0xE1000 is 256 addresses. (maximum of exactly 256 addresses will be used)
- *       Difference between each start address is 258, just to be safe
+//const unsigned int FRAM_START_ADDRESSES[] = { 0xC400, 0xDFE4, 0xFBC8 };
+/* IMPORTANT NOTE: FRAM supports only from address 0xC400 to 0xFF80,
+ *       thus the last mode will not be supported/have data truncated/truncate other's data
+ *       Difference of exactly 2 * 255 * 14 = 7140 bytes/addresses between each address
+ *          (2 bytes for unsigned int, 255 maximum entries per code_num and 14 TOTAL_CODES)
  *       This ensures that when writing the IR signals, they don't override that of another mode.
  */
 
-unsigned int *FRAM_write_ptr = (unsigned int *)(0xE000);
-unsigned int *FRAM_read_ptr  = (unsigned int *)(0xE000);
+#pragma PERSISTENT(tx_data);
+unsigned int tx_data[TOTAL_MODES][TOTAL_CODES][MAX_IR_CNT] = {0};
+
+unsigned int *FRAM_write_ptr = (unsigned int *)(&tx_data[0][0][0]);
+unsigned int *FRAM_read_ptr  = (unsigned int *)(&tx_data[0][0][0]);
 
 int main(void){
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
 	
 	Init_GPIO();
 	Init_Clock();
-//    Init_ADC();
 
     LCD_Init();
 
@@ -102,6 +111,7 @@ int main(void){
     IR_status = DISABLED;
     mode = AIRCON;
 
+    /*
     while(intro){
         LCD_Text("Press either push button to switch between appliance  To copy the signals from an appliance press  COPY  BUTTON  OK   Hold both push buttons to turn off and on the remote");
 
@@ -109,7 +119,7 @@ int main(void){
             intro = FALSE;
             break;
         }
-    }
+    }*/
 
     LCD_Text( (char *)(MODE_NAMES[mode]) );
 
@@ -204,7 +214,7 @@ int main(void){
 
 
 void IR_Mode_Setting(){
-    if(intro == TRUE) return;
+    //if(intro == TRUE) return;
 
     LCD_Clear();
 
@@ -230,7 +240,9 @@ void IR_Mode_Setting(){
         if(copy_mode == TRUE){  //copy mode => Perform copy
             P4OUT |= (BIT0);
 
-            FRAM_write_ptr = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM write address
+            //FRAM_write_ptr = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM write address (Note: <<9 multiplies by 512)
+            FRAM_write_ptr = &tx_data[mode][code_num][0];
+
             SYSCFG0 &= ~PFWP;
             rx_cnt[mode][code_num] = 0;
             SYSCFG0 |= PFWP;
@@ -247,7 +259,8 @@ void IR_Mode_Setting(){
                 IR_status = DISABLED;
             }
 
-            FRAM_read_ptr  = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM read address
+            //FRAM_read_ptr  = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM read address (Note: << 9 multiplies by 512)
+            FRAM_read_ptr = &tx_data[mode][code_num][0];
         }
     }
     else{
@@ -294,6 +307,7 @@ void Init_GPIO(){
 //Initialize Clock
 void Init_Clock()
 {
+    /* SETUP IMPORTANT CLOCKS AND OSCILLATORS */
 	P4SEL0 |= BIT1 | BIT2;                  // set XT1 pin as second function
 
 	do
@@ -318,68 +332,13 @@ void Init_Clock()
 												// DCOCLK = MCLK and SMCLK source
 	CSCTL5 |= DIVM_0 | DIVS_1;              // MCLK = DCOCLK = 8MHZ,
 											// SMCLK = MCLK/2 = 4MHz
-}
 
-//Init ADC
-void Init_ADC(){
-    //Initialize the ADC Module
-    /*
-     * Base Address for the ADC Module
-     * Use Timer trigger 1 as sample/hold signal to start conversion
-     * USE MODOSC 5MHZ Digital Oscillator as clock source
-     * Use default clock divider of 1
-     * Repeat Single channel
-     * (For digital voltmeter, use repeat multichannel)
-     */
-    ADCCTL0 &= ~(ADCON | ADCENC | ADCSC);//Set ADCENC as 0 so as to begin init.
+	/* SETUP TIMER A1.0 FOR COUNTING INTERVALS AND THROWING INTO LPM4 */
+    TA1CTL |= MC__STOP; TA1CTL &= ~(TACLR); //Stop and reset timer
+    TA1CTL &= ~(TAIFG); //Clear interrupt flag
+    TA1CTL |= MC__CONTINUOUS | TASSEL__ACLK | ID__8 | TAIE; //ACLK is 32768Hz (low-power).
 
-    ADCCTL1 |= ADCSHS_2 | ADCDIV_0 | ADCSSEL_0 | ADCCONSEQ_3;//ADCCONSEQ_2;
-    ADCIE &= 0x0000;
-
-    ADCCTL0 |= ADCON;
-
-    //Configure Memory Buffer
-    /*
-     * Base Address for the ADC Module
-     * Use input A12 Temp Sensor
-     * Use positive reference of Internally generated Vref
-     * Use negative reference of AVss
-     */
-
-    ADCMCTL0 |= ADCINCH_3; //Digital Voltmeter
-    ADCMCTL0 |= ADCINCH_12; //Temperature Sensor
-    ADCMCTL0 |= ADCSREF_0; //REF0: V+ = 3.3V; REF1: V+ = 1.5V
-
-    ADCCTL2 |= ADCRES_1; //10-bit
-
-    //Enable and clear all interrupts
-    ADCIE |= ADCIE0;
-    ADCIFG &= 0x0000;
-
-    //Start & Enable Conversion
-    ADCCTL0 |= ADCENC | ADCSC;
-
-    // Enable internal reference and temperature sensor
-    PMMCTL0_H = PMMPW_H; //Need to set password to set the registers
-    PMMCTL2 |= INTREFEN | TSENSOREN;
-    PMMCTL0_H = 0x00;   //Reset, otherwise the FRAM will reset, and the code will start again from top.
-
-    /*-------- INIT TA1.1 WHICH IS USED AS TIMER SOURCE FOR SAMPLING ----------*/
-    TA1CCR0 = 0x1000; //Period
-
-    TA1CTL |= TASSEL__ACLK | ID__1 | MC__UP | TACLR;
-           // ACLK,    DIVIDER 1   UP_MODE,  CLEAR TIMER
-           // ACLK/4 = 32768/1Hz ( ACLK frequency has been set under Init_Clock(). Linked to XT1)
-    TA1CTL &= ~(TAIE | TAIFG); //DISABLE INTERRUPT, CLEAR FLAG
-
-    //DISABLE INTERRUPT FOR TA1.1 and CCR0
-    TA1CCTL0 &= ~(CCIE | CCIFG);
-    TA1CCTL1 &= ~(CCIE | CCIFG);
-
-    TA1CCTL1 &= ~(CAP); //COMPARE MODE
-    TA1CCTL1 |= OUTMOD_7; //OUTPUT MODE 7 (Reset/set)
-    TA1CCTL1 &= ~(CCIE | CCIFG); //DISABLE NTERRUPTS, CLEAR FLAG
-    TA1CCR1 = 0x1000; //COMPARE VALUE
+    TA0CCR0 = 8192; //4096 = 1s => 8192 = 2s
 }
 
 /* PORT1 Interrupt Service Routine
@@ -404,7 +363,7 @@ __interrupt void PORT1_ISR(void)
                 P1OUT |= BIT0;
                 Buttons_startWDT();
 
-                if(intro == FALSE){
+                //if(intro == FALSE){
                     copy_mode = FALSE;
                     IR_status = DISABLED;
 
@@ -412,7 +371,7 @@ __interrupt void PORT1_ISR(void)
                     if(mode>=TOTAL_MODES) mode = 0;
 
                     LCD_Text( (char*)(MODE_NAMES[mode]) );
-                }
+                //}
             }
             __bic_SR_register_on_exit(LPM3_bits); //exit LPM3
             break;
@@ -461,7 +420,7 @@ __interrupt void PORT2_ISR(void)
                 P1OUT |= BIT0;
                 Buttons_startWDT();
 
-                if(intro == FALSE){
+                //if(intro == FALSE){
                     copy_mode = FALSE;
                     IR_status = DISABLED;
 
@@ -469,7 +428,7 @@ __interrupt void PORT2_ISR(void)
                     if(mode>=TOTAL_MODES) mode = 0;
 
                     LCD_Text( (char*)(MODE_NAMES[mode]) );
-                }
+                //}
             }
             __bic_SR_register_on_exit(LPM3_bits); //exit LPM3
             break;
@@ -488,47 +447,10 @@ __interrupt void PORT2_ISR(void)
     }
 }
 
-/*
- * ADC Interrupt Service Routine
- * Show the value of the temperature on the LCD Screen by exiting LPM3.
- */
-#pragma vector=ADC_VECTOR
-__interrupt void ADC_ISR(void) {
-    switch(__even_in_range(ADCIV,ADCIV_ADCIFG))
-    {
-        case ADCIV_NONE:
-            break;
-        case ADCIV_ADCOVIFG:
-            break;
-        case ADCIV_ADCTOVIFG:
-            break;
-        case ADCIV_ADCHIIFG:
-            break;
-        case ADCIV_ADCLOIFG:
-            break;
-        case ADCIV_ADCINIFG:
-            break;
-        case ADCIV_ADCIFG:
-        	    // Clear interrupt flag
-			ADCIFG &= ~(ADCIFG0);
-            if(channel) channel--;
-            else channel = MAX_ADC_CHANNEL;
-
-            switch(channel+1){
-                case 3:
-                //case 12:
-                    __bic_SR_register_on_exit(LPM3_bits);                // Exit LPM3
-                    break;
-            }
-            break;
-        default:
-            break;
-    }
-}
-
 /* CONTROLLING OF IR TX AND RX
- * -    TIMER0.0 and 0.1:
- *
+ * -    TA 0.0: TX
+ * -    TA 0.2: RX
+ * -
  */
 
 //********Timer0.0 interrupt ISR*********//
@@ -555,7 +477,7 @@ __interrupt void TIMER0_A0_ISR (void)
 
                 LCD_Text( (char *)(MODE_NAMES[mode]) );
 
-                __delay_cycles(800000); //TODO: Start a timer and use the timer interrupt to exit LPM3 instead
+                __delay_cycles(1600000); //TODO: Start a timer and use the timer interrupt to exit LPM3 instead
                 __bic_SR_register_on_exit(LPM3_bits);                // Exit LPM3
             }
             break;
@@ -571,17 +493,16 @@ __interrupt void TIMER0_A1_ISR (void) {
         case TA0IV_TACCR1: //TA0.1
             break;
         case TA0IV_TACCR2: //TA0.2
-            if(IR_status == RECEIVING && rx_cnt[mode][code_num] < 255) {
+            if(IR_status == RECEIVING && rx_cnt[mode][code_num] < MAX_IR_CNT) {
                 SYSCFG0 &= ~PFWP;
                 rx_cnt[mode][code_num]++;
                 SYSCFG0 |= PFWP;
 
                 old_cnt = new_cnt;                  //Update the counter value
                 new_cnt = TA0CCR2;
-                time_cnt = new_cnt-old_cnt;        //Time interval
 
                 SYSCFG0 &= ~PFWP;
-                *FRAM_write_ptr = time_cnt;         //write FRAM to store data
+                *FRAM_write_ptr = new_cnt-old_cnt;    //write FRAM to store data
                 SYSCFG0 |= PFWP;
 
                 FRAM_write_ptr++;
