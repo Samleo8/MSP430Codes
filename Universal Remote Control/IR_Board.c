@@ -183,7 +183,6 @@ void Buttons_startWDT() {
     SFRIE1 |= WDTIE;
 }
 
-
 // Handles Watchdog Timer interrupts.
 #pragma vector=WDT_VECTOR
 __interrupt void WDT_ISR(void) {

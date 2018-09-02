@@ -2,7 +2,7 @@
 <ofd>
    <banner>MSP430 Object File Display Unix v18.1.1.LTS</banner>
    <copyright>Copyright (c) 2003-2017 Texas Instruments Incorporated</copyright>
-   <name>/Users/sam/Documents/Electronics/MC Codes/Universal Remote Control/Debug/Universal Remote Control.out</name>
+   <name>/Users/sam/Documents/Electronics/MC Codes/Universal Remote Control/Release/Universal Remote Control.out</name>
    <call_graph>
       <function>
          <name>__delay_cycles</name>
@@ -22,7 +22,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../IR_Board.h</file>
          <line>0xb</line>
-         <address>0xe1ce</address>
+         <address>0xd3ba</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -34,7 +34,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../IR_Board.c</file>
          <line>0xbd</line>
-         <address>0xec56</address>
+         <address>0xddc0</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -46,7 +46,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../IR_Board.h</file>
          <line>0xa</line>
-         <address>0xeae6</address>
+         <address>0xdbe2</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -58,7 +58,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../IR_Board.h</file>
          <line>0xd</line>
-         <address>0xecbe</address>
+         <address>0xde28</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -70,7 +70,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../LCD.h</file>
          <line>0x15</line>
-         <address>0xec90</address>
+         <address>0xddfa</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -82,7 +82,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../LCD.c</file>
          <line>0x80</line>
-         <address>0xe5f6</address>
+         <address>0xd79e</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -94,7 +94,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../LCD.h</file>
          <line>0x1d</line>
-         <address>0xe6c4</address>
+         <address>0xd858</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -108,7 +108,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../LCD.c</file>
          <line>0x7a</line>
-         <address>0xecce</address>
+         <address>0xde38</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -120,7 +120,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../LCD.h</file>
          <line>0x14</line>
-         <address>0xeb4c</address>
+         <address>0xdc98</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -132,13 +132,39 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>../LCD.h</file>
          <line>0x1c</line>
-         <address>0xdff2</address>
+         <address>0xd260</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
          <producer>TI MSP430 C/C++ Codegen Unix v18.1.1.LTS Copyright (c) 2003-2017 Texas Instruments Incorporated</producer>
          <callee>LCD_Letter</callee>
          <callee>LCD_Digit</callee>
+         <callee>$abproc1</callee>
+         <callee>$abproc0</callee>
+      </function>
+      <function>
+         <name>$abproc1</name>
+         <stack_size>0x0</stack_size>
+         <makes_indirect_call>false</makes_indirect_call>
+         <file></file>
+         <line>0x0</line>
+         <address>0xd3a2</address>
+         <is_combined>false</is_combined>
+         <definition_seen>true</definition_seen>
+         <has_stack_usage_info>false</has_stack_usage_info>
+         <producer>TI MSP430 C/C++ Codegen Unix v18.1.1.LTS Copyright (c) 2003-2017 Texas Instruments Incorporated</producer>
+      </function>
+      <function>
+         <name>$abproc0</name>
+         <stack_size>0x0</stack_size>
+         <makes_indirect_call>false</makes_indirect_call>
+         <file></file>
+         <line>0x0</line>
+         <address>0xd6a6</address>
+         <is_combined>false</is_combined>
+         <definition_seen>true</definition_seen>
+         <has_stack_usage_info>false</has_stack_usage_info>
+         <producer>TI MSP430 C/C++ Codegen Unix v18.1.1.LTS Copyright (c) 2003-2017 Texas Instruments Incorporated</producer>
       </function>
       <function>
          <name>__enable_interrupt</name>
@@ -181,8 +207,8 @@
          <stack_size>0x4</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x112</line>
-         <address>0xe780</address>
+         <line>0x100</line>
+         <address>0xd90e</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -193,8 +219,8 @@
          <stack_size>0x4</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x134</line>
-         <address>0xea12</address>
+         <line>0x122</line>
+         <address>0xdc48</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -205,8 +231,8 @@
          <stack_size>0x4</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x5a</line>
-         <address>0xe404</address>
+         <line>0x54</line>
+         <address>0xd4cc</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -218,12 +244,24 @@
          <callee>Init_Clock</callee>
       </function>
       <function>
+         <name>TIMER1_A0_ISR</name>
+         <stack_size>0x8</stack_size>
+         <makes_indirect_call>false</makes_indirect_call>
+         <file>../main.c</file>
+         <line>0x1fd</line>
+         <address>0xdda2</address>
+         <is_combined>false</is_combined>
+         <definition_seen>true</definition_seen>
+         <has_stack_usage_info>true</has_stack_usage_info>
+         <producer>TI MSP430 C/C++ Codegen Unix v18.1.1.LTS Copyright (c) 2003-2017 Texas Instruments Incorporated</producer>
+      </function>
+      <function>
          <name>TIMER0_A1_ISR</name>
          <stack_size>0x18</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x1ea</line>
-         <address>0xe80e</address>
+         <line>0x1d6</line>
+         <address>0xdb08</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -247,8 +285,8 @@
          <stack_size>0x18</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x1ca</line>
-         <address>0xe918</address>
+         <line>0x1b6</line>
+         <address>0xd99c</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -261,8 +299,8 @@
          <stack_size>0x4</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0xd8</line>
-         <address>0xe2f0</address>
+         <line>0xc8</line>
+         <address>0xd6b8</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -270,6 +308,7 @@
          <callee>LCD_Clear</callee>
          <callee>LCD_Text</callee>
          <callee>LCD_IR_Buttons</callee>
+         <callee>$abproc0</callee>
          <callee>__mspabi_mpyi</callee>
       </function>
       <function>
@@ -278,7 +317,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file></file>
          <line>0x0</line>
-         <address>0xecaa</address>
+         <address>0xde14</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -289,8 +328,8 @@
          <stack_size>0x18</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x194</line>
-         <address>0xe998</address>
+         <line>0x182</line>
+         <address>0xda94</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -305,8 +344,8 @@
          <stack_size>0x18</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>../main.c</file>
-         <line>0x15f</line>
-         <address>0xe898</address>
+         <line>0x14f</line>
+         <address>0xda1a</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -322,7 +361,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>boot.c</file>
          <line>0x85</line>
-         <address>0xec74</address>
+         <address>0xddde</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -338,7 +377,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>pre_init.c</file>
          <line>0x38</line>
-         <address>0xece8</address>
+         <address>0xde52</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -446,7 +485,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>startup.c</file>
          <line>0x3b</line>
-         <address>0xecec</address>
+         <address>0xde56</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -458,7 +497,7 @@
          <makes_indirect_call>true</makes_indirect_call>
          <file>autoinit.c</file>
          <line>0xa5</line>
-         <address>0xea7c</address>
+         <address>0xdb78</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -471,7 +510,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>copy_zero_init.c</file>
          <line>0x82</line>
-         <address>0xebdc</address>
+         <address>0xdd28</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -495,7 +534,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>copy_decompress_none.c</file>
          <line>0x53</line>
-         <address>0xeb9c</address>
+         <address>0xdce8</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -507,7 +546,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>copy_decompress_none.c</file>
          <line>0x62</line>
-         <address>0xec1a</address>
+         <address>0xdd66</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -520,7 +559,7 @@
          <makes_indirect_call>false</makes_indirect_call>
          <file>copy_decompress_lzss.c</file>
          <line>0x7c</line>
-         <address>0xe508</address>
+         <address>0xd5ca</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>
@@ -528,24 +567,12 @@
          <callee>$abproc0</callee>
       </function>
       <function>
-         <name>$abproc0</name>
-         <stack_size>0x0</stack_size>
-         <makes_indirect_call>false</makes_indirect_call>
-         <file></file>
-         <line>0x0</line>
-         <address>0xe5e4</address>
-         <is_combined>false</is_combined>
-         <definition_seen>true</definition_seen>
-         <has_stack_usage_info>false</has_stack_usage_info>
-         <producer>TI MSP430 C/C++ Codegen Unix v18.1.1.LTS Copyright (c) 2003-2017 Texas Instruments Incorporated</producer>
-      </function>
-      <function>
          <name>abort</name>
          <stack_size>0x4</stack_size>
          <makes_indirect_call>false</makes_indirect_call>
          <file>exit.c</file>
          <line>0x63</line>
-         <address>0xece2</address>
+         <address>0xde4c</address>
          <is_combined>false</is_combined>
          <definition_seen>true</definition_seen>
          <has_stack_usage_info>true</has_stack_usage_info>

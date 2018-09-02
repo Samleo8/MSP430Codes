@@ -56,7 +56,7 @@ MEMORY
     SFR                     : origin = 0x0000, length = 0x0010
     PERIPHERALS_8BIT        : origin = 0x0010, length = 0x00F0
     PERIPHERALS_16BIT       : origin = 0x0100, length = 0x0100
-    RAM                     : origin = 0x2000, length = 0x0800 //original length: 0x0800 (currently reserving only 256 bytes)
+    RAM                     : origin = 0x2000, length = 0x0800
     INFOA                   : origin = 0x1800, length = 0x0200
     FRAM                    : origin = 0xC400, length = 0x3B80
     JTAGSIGNATURE           : origin = 0xFF80, length = 0x0004, fill = 0xFFFF
@@ -138,12 +138,12 @@ SECTIONS
 
        GROUP(READ_ONLY_MEMORY)
        {
-          //.cinit      : {}                   /* Initialization tables             */
-          //.pinit      : {}                   /* C++ constructor tables            */
-          //.binit      : {}                   /* Boot-time Initialization tables   */
-          //.init_array : {}                   /* C++ constructor tables            */
-          //.mspabi.exidx : {}                 /* C++ constructor tables            */
-          //.mspabi.extab : {}                 /* C++ constructor tables            */
+          .cinit      : {}                   /* Initialization tables             */
+          .pinit      : {}                   /* C++ constructor tables            */
+          .binit      : {}                   /* Boot-time Initialization tables   */
+          .init_array : {}                   /* C++ constructor tables            */
+          .mspabi.exidx : {}                 /* C++ constructor tables            */
+          .mspabi.extab : {}                 /* C++ constructor tables            */
           .const      : {}                   /* Constant data                     */
        }
 
@@ -176,12 +176,9 @@ SECTIONS
     .infoA (NOLOAD) : {} > INFOA              /* MSP430 INFO FRAM  Memory segments */
 
 
-    /*	Alternative: Move some parts to Flash to free up FRAM */
-    //.text       		: {} > RAM     	// 	CODE
-    //.text:_isr  		: {} > RAM      	// 	ISR CODE SPACE
+    /*	Alternative: Move some parts to Flash to free up FRAM
 	.cinit      		: {} > RAM      	// 	INITIALIZATION TABLES
     .pinit      		: {} > RAM      	// 	C++ CONSTRUCTOR TABLES
-	//.const      		: {} > RAM		// 	CONSTANT DATA
     .init_array 		: {} > RAM      	// 	C++ CONSTRUCTOR TABLES
 	.mspabi.exidx 	: {} > RAM      	// 	C++ CONSTRUCTOR TABLES
 	.mspabi.extab 	: {} > RAM      	// 	C++ CONSTRUCTOR TABLES

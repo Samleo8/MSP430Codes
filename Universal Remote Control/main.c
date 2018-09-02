@@ -21,14 +21,9 @@
  * 	NOTE: To support one byte enums, change Properties > Advanced > Runtime options > enum to "packed"
  * 	      Change Properties -> Debug -> MSP430 Properties -> Download Options -> Erase Options to "Erase and download necessary segements only (Differential Download)"
 ****************************/
-
 #include "main.h"
 #include "LCD.h"
 #include "IR_Board.h"
-
-//extern const unsigned char POS[7];
-
-//boolean intro = FALSE; //NOTE: Make this 'FALSE' if you don't want the intro.
 
 //IR Keypad Buttons
 unsigned char button_num = TOTAL_KEYS+1;     //button number
@@ -47,6 +42,7 @@ enum MODES {
     TV1,
     TV2
 } mode = AIRCON;
+
 #define TOTAL_MODES 1
 #define TOTAL_CODES 14
 
@@ -63,13 +59,13 @@ unsigned char   code_num = 0;
 boolean copy_mode;
 
 //RX,TX and Timer Counters
-#define MAX_IR_CNT 255
+#define MAX_IR_CNT_AC 255
+#define MAX_IR_CNT_TV 64
 
 #pragma PERSISTENT(rx_cnt);     //store rx_cnt in FRAM | TODO: Better partition memory
 unsigned char    rx_cnt[TOTAL_MODES][TOTAL_CODES]={0}; //received bit counter (unsigned char is good enough since the max size of the count is 255
 unsigned char    tx_cnt=1;          //transmitted bit counter
 
-unsigned int    new_cnt=0;      //new timer counter
 unsigned int    old_cnt=0;      //old timer counter
 
 //FRAM Writing and Reading
@@ -81,8 +77,9 @@ unsigned int    old_cnt=0;      //old timer counter
  *       This ensures that when writing the IR signals, they don't override that of another mode.
  */
 
-#pragma PERSISTENT(tx_data);
-unsigned int tx_data[TOTAL_MODES][TOTAL_CODES][MAX_IR_CNT] = {0};
+#pragma PERSISTENT(tx_data_aircon);
+unsigned int tx_data_aircon[TOTAL_CODES][MAX_IR_CNT_AC] = {0};
+unsigned int tx_data_tv[TOTAL_MODES-1][TOTAL_CODES][MAX_IR_CNT_TV] = {0};
 
 unsigned int *FRAM_write_ptr = (unsigned int *)(&tx_data[0][0][0]);
 unsigned int *FRAM_read_ptr  = (unsigned int *)(&tx_data[0][0][0]);
@@ -111,16 +108,6 @@ int main(void){
     IR_status = DISABLED;
     mode = AIRCON;
 
-    /*
-    while(intro){
-        LCD_Text("Press either push button to switch between appliance  To copy the signals from an appliance press  COPY  BUTTON  OK   Hold both push buttons to turn off and on the remote");
-
-        if(buttonDebounce == BUTTON_PRESSED || button_num!=TOTAL_KEYS+1){
-            intro = FALSE;
-            break;
-        }
-    }*/
-
     LCD_Text( (char *)(MODE_NAMES[mode]) );
 
     while(1) {
@@ -134,8 +121,8 @@ int main(void){
                  * 5. Timer stops and code continues (actually it just enters LPM3 again).
                  */
 
-                TA0CTL = TASSEL_2 + MC_2 + TACLR;   //SMCLK, Continuous mode
-                TA0CCTL2=CM_3+SCS+CCIS_0+CAP+CCIE;  //set TA0.2 control register choose CCIxA
+                TA0CTL      =   TASSEL_2 | MC__CONTINUOUS | TACLR;   //SMCLK, Continuous mode
+                TA0CCTL2    =   CM_3 | SCS | CCIS_0 | CAP | CCIE;  //set TA0.2 control register choose CCIxA, both edges, synchronized
 
                 // Pause by entering LPM3 until receiving complete.
                 // note that button interrupt cannot cause it to exit out of LPM3 because P1/2 interrupts have been disabled
@@ -147,6 +134,7 @@ int main(void){
             }
             else{
                 //Waiting for user to press button to copy signal to
+                //"COPY" will be displayed here
             }
         }
         else if(copy_mode == FALSE && IR_status == TRANSMITTING)
@@ -188,7 +176,7 @@ int main(void){
             // button interrupts MUST be disabled so it doesn't accidentally cause LPM3 exit
             __bis_SR_register(LPM3_bits | GIE);
 
-            // Transmission complete: disable timer 0 and 1
+            // Transmission complete: disable timer TA0 and TA1
             TA0CCTL0 = 0;
             TA0CCTL2 = 0;
             TA0CTL = 0;
@@ -204,18 +192,19 @@ int main(void){
             P1IE |= (BIT2 | BIT3 | BIT4 | BIT5);
             P2IE |= (BIT6 | BIT7);
         }
-        else{
+
+        if(IR_status == DISABLED){
             //Idle
-            //LCD_Text( (char*)(MODE_NAMES[mode]) );
+            //__delay_cycles(1600000);
+            LCD_Text( (char*)(MODE_NAMES[mode]) );
         }
+
         __bis_SR_register(LPM3_bits | GIE);     //enter low power mode
     }
 }
 
 
 void IR_Mode_Setting(){
-    //if(intro == TRUE) return;
-
     LCD_Clear();
 
     if(button_num == 2) {
@@ -240,8 +229,19 @@ void IR_Mode_Setting(){
         if(copy_mode == TRUE){  //copy mode => Perform copy
             P4OUT |= (BIT0);
 
-            //FRAM_write_ptr = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM write address (Note: <<9 multiplies by 512)
-            FRAM_write_ptr = &tx_data[mode][code_num][0];
+            switch(mode){
+                case AIRCON:
+                    FRAM_write_ptr = &tx_data_aircon[code_num][0];
+                    //TODO: Set an alternative for AC power off and on
+                    break;
+                case TV1:
+                    FRAM_write_ptr = &tx_data_tv[0][code_num][0];
+                    break;
+                case TV2:
+                    FRAM_write_ptr = &tx_data_tv[1][code_num][0];
+                    break;
+                default: return;
+            }
 
             SYSCFG0 &= ~PFWP;
             rx_cnt[mode][code_num] = 0;
@@ -259,12 +259,23 @@ void IR_Mode_Setting(){
                 IR_status = DISABLED;
             }
 
-            //FRAM_read_ptr  = (unsigned int *)(FRAM_START_ADDRESSES[mode] + ((code_num)<<9));    //set FRAM read address (Note: << 9 multiplies by 512)
-            FRAM_read_ptr = &tx_data[mode][code_num][0];
+            switch(mode){
+                case AIRCON:
+                    FRAM_read_ptr = &tx_data_aircon[code_num][0];
+                    //TODO: Set an alternative for AC power off and on
+                    break;
+                case TV1:
+                    FRAM_read_ptr = &tx_data_tv[0][code_num][0];
+                    break;
+                case TV2:
+                    FRAM_read_ptr = &tx_data_tv[1][code_num][0];
+                    break;
+                default: return;
+            }
         }
     }
     else{
-        LCD_Text( (char*)(MODE_NAMES[mode]) );
+        //LCD_Text( (char*)(MODE_NAMES[mode]) );
         IR_status = DISABLED;
     }
 }
@@ -333,12 +344,14 @@ void Init_Clock()
 	CSCTL5 |= DIVM_0 | DIVS_1;              // MCLK = DCOCLK = 8MHZ,
 											// SMCLK = MCLK/2 = 4MHz
 
-	/* SETUP TIMER A1.0 FOR COUNTING INTERVALS AND THROWING INTO LPM4 */
+	/* SETUP TIMER A1.0 FOR COUNTING INTERVALS AND THROWING INTO LPM4
     TA1CTL |= MC__STOP; TA1CTL &= ~(TACLR); //Stop and reset timer
     TA1CTL &= ~(TAIFG); //Clear interrupt flag
-    TA1CTL |= MC__CONTINUOUS | TASSEL__ACLK | ID__8 | TAIE; //ACLK is 32768Hz (low-power).
+    TA1CTL |= TASSEL__ACLK | ID__8; //ACLK is 32768Hz (low-power).
+    TA1CTL |= MC__CONTINUOUS | TAIE; //start timer in continuous mode
 
     TA0CCR0 = 8192; //4096 = 1s => 8192 = 2s
+    */
 }
 
 /* PORT1 Interrupt Service Routine
@@ -363,15 +376,11 @@ __interrupt void PORT1_ISR(void)
                 P1OUT |= BIT0;
                 Buttons_startWDT();
 
-                //if(intro == FALSE){
-                    copy_mode = FALSE;
-                    IR_status = DISABLED;
+                copy_mode = FALSE;
+                IR_status = DISABLED;
 
-                    mode++;
-                    if(mode>=TOTAL_MODES) mode = 0;
-
-                    LCD_Text( (char*)(MODE_NAMES[mode]) );
-                //}
+                mode++;
+                if(mode>=TOTAL_MODES) mode = 0;
             }
             __bic_SR_register_on_exit(LPM3_bits); //exit LPM3
             break;
@@ -420,15 +429,13 @@ __interrupt void PORT2_ISR(void)
                 P1OUT |= BIT0;
                 Buttons_startWDT();
 
-                //if(intro == FALSE){
-                    copy_mode = FALSE;
-                    IR_status = DISABLED;
+                copy_mode = FALSE;
+                IR_status = DISABLED;
 
-                    mode++;
-                    if(mode>=TOTAL_MODES) mode = 0;
+                mode++;
+                if(mode>=TOTAL_MODES) mode = 0;
 
-                    LCD_Text( (char*)(MODE_NAMES[mode]) );
-                //}
+                //LCD_Text( (char*)(MODE_NAMES[mode]) );
             }
             __bic_SR_register_on_exit(LPM3_bits); //exit LPM3
             break;
@@ -475,9 +482,7 @@ __interrupt void TIMER0_A0_ISR (void)
                 TA0CCTL0 &= ~CCIE;      // disable timer_A0 interrupt
                 tx_cnt = 1;
 
-                LCD_Text( (char *)(MODE_NAMES[mode]) );
-
-                __delay_cycles(1600000); //TODO: Start a timer and use the timer interrupt to exit LPM3 instead
+                //TODO: Start a timer and use the timer interrupt to exit LPM3 instead
                 __bic_SR_register_on_exit(LPM3_bits);                // Exit LPM3
             }
             break;
@@ -498,12 +503,11 @@ __interrupt void TIMER0_A1_ISR (void) {
                 rx_cnt[mode][code_num]++;
                 SYSCFG0 |= PFWP;
 
-                old_cnt = new_cnt;                  //Update the counter value
-                new_cnt = TA0CCR2;
-
                 SYSCFG0 &= ~PFWP;
-                *FRAM_write_ptr = new_cnt-old_cnt;    //write FRAM to store data
+                *FRAM_write_ptr = TA0CCR2-old_cnt;    //write FRAM to store data
                 SYSCFG0 |= PFWP;
+
+                old_cnt = TA0CCR2;
 
                 FRAM_write_ptr++;
 
@@ -524,3 +528,19 @@ __interrupt void TIMER0_A1_ISR (void) {
         default: break;
     }
 }
+
+/********Timer 1.0 interrupt ISR*********/
+#pragma vector = TIMER1_A0_VECTOR
+__interrupt void TIMER1_A0_ISR (void) {
+    switch(__even_in_range(TA1IV,TA1IV_TAIFG)) {
+        case TA1IV_NONE:
+            P1OUT ^= BIT0;
+            break;
+        case TA1IV_TAIFG:
+            P4OUT ^= BIT0;
+            break;
+        default: break;
+    }
+}
+//*/
+
