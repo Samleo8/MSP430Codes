@@ -120,34 +120,34 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-Universal\ Remote\ Control.out \
+Universal\ IR\ (Data\ Collection).out \
 
 EXE_OUTPUTS__QUOTED += \
-"Universal Remote Control.out" \
+"Universal IR (Data Collection).out" \
 
 BIN_OUTPUTS += \
-Universal\ Remote\ Control.hex \
+Universal\ IR\ (Data\ Collection).hex \
 
 BIN_OUTPUTS__QUOTED += \
-"Universal Remote Control.hex" \
+"Universal IR (Data Collection).hex" \
 
 
 # All Target
 all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
-	@$(MAKE) --no-print-directory -Onone "Universal Remote Control.out"
+	@$(MAKE) --no-print-directory -Onone "Universal IR (Data Collection).out"
 
 # Tool invocations
-Universal\ Remote\ Control.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+Universal\ IR\ (Data\ Collection).out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: MSP430 Linker'
-	"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx -O2 --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"Universal Remote Control.map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="Universal Remote Control_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Universal Remote Control.out" $(ORDERED_OBJS)
+	"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx -O2 --use_hw_mpy=none --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --enum_type=packed --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 -z -m"Universal IR (Data Collection).map" --heap_size=160 --stack_size=160 --cinit_hold_wdt=on -i"/Applications/ti/ccsv8/ccs_base/msp430/include" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib" -i"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="Universal IR (Data Collection)_linkInfo.xml" --use_hw_mpy=none --rom_model -o "Universal IR (Data Collection).out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
-Universal\ Remote\ Control.hex: $(EXE_OUTPUTS)
+Universal\ IR\ (Data\ Collection).hex: $(EXE_OUTPUTS)
 	@echo 'Building files: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo 'Invoking: MSP430 Hex Utility'
-	"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "Universal Remote Control.hex" $(EXE_OUTPUTS__QUOTED)
+	"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/hex430" --memwidth=8 --romwidth=8 -o "Universal IR (Data Collection).hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $(strip $(EXE_OUTPUTS__QUOTED))'
 	@echo ' '
 

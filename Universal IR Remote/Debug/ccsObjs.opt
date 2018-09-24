@@ -1,0 +1,1 @@
+"./IR_Board.obj" "./IR_Codes.obj" "./LCD.obj" "./main.obj" "../lnk_msp430fr4133.cmd" -llibc.a 

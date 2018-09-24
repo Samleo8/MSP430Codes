@@ -1,4 +1,6 @@
 PROMPT_FOR_ADVISOR_REMARKS_ON_LAUNCH=always
+REBUILD_PROGRAM_BEFORE_LOADING=true
+RELOAD_PROGRAM_IF_CHANGED=always
 eclipse.preferences.version=1
 symbolAutoCompleteHistory<seperator>org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser<seperator>TI\ MSP430\ USB1\\MSP430=ans,0xe0E0,0xe000,0x00,0xe0e0,0x2012,0xE010,0x1010,0x8010,0xe010,0x00e010,0xE000
 useAnnotationsPrefPage=true
