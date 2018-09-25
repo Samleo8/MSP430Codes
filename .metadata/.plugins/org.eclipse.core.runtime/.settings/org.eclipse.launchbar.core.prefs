@@ -1,6 +1,6 @@
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86_64
 LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=macosx
-configDescList=org.eclipse.launchbar.core.descriptorType.default\:IR_Learning_Mode,org.eclipse.launchbar.core.descriptorType.default\:Universal Remote Control,org.eclipse.launchbar.core.descriptorType.default\:Universal IR Remote
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:IR_Learning_Mode,org.eclipse.launchbar.core.descriptorType.default\:Universal IR Remote,org.eclipse.launchbar.core.descriptorType.default\:Universal Remote Control,org.eclipse.launchbar.core.descriptorType.default\:Universal IR (Data Collection)
 eclipse.preferences.version=1
 org.eclipse.launchbar.core.descriptorType.default\:FRAM\ and\ Keypad\ Test/activeLaunchMode=run
 org.eclipse.launchbar.core.descriptorType.default\:FRAM\ and\ Keypad\ Test/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
@@ -13,3 +13,4 @@ org.eclipse.launchbar.core.descriptorType.default\:IR_Learning_Mode/activeLaunch
 org.eclipse.launchbar.core.descriptorType.default\:LCD\ Test/activeLaunchMode=debug
 org.eclipse.launchbar.core.descriptorType.default\:OutOfBox_MSP430FR4133/activeLaunchMode=debug
 org.eclipse.launchbar.core.descriptorType.default\:PWM\ Test/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:Universal\ IR\ (Data\ Collection)/activeLaunchMode=debug

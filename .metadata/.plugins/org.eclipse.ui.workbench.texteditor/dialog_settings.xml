@@ -2,12 +2,14 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="LCD_Text" key="selection"/>
+		<item value="#define" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="#define"/>
+			<item value="power"/>
 			<item value="LCD_Text"/>
 			<item value="button_num"/>
 			<item value="rx"/>
@@ -21,8 +23,6 @@
 			<item value="delay"/>
 			<item value="BlinkLED"/>
 			<item value="tx_cnt"/>
-			<item value="none"/>
-			<item value="IR_Mode_Setting"/>
 		</list>
 		<list key="replacehistory">
 			<item value="DISABLED"/>

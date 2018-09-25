@@ -35,11 +35,12 @@ unsigned int CODE_GET_COUNT_OR_TIME(enum MODES curr_mode, enum KEYPAD curr_num, 
                     }
                 case POWER:
                     switch(time){
-                        case 0: return 25; //count
-                        case 1: return 2217; //actual time from coded 1...
-                        case 2: return 2590;
-                        case 3: return 4985;
-                        case 4: return 9790;
+                        case 0: return 26; //count
+                        case 1: return 2212; //actual time from coded 1...
+                        case 2: return 2568;
+                        case 3: return 4967;
+                        case 4: return 9748;
+                        case 5: return 36712;
                         default: return 0;
                     }
                 default: break; //will return 0 anyway

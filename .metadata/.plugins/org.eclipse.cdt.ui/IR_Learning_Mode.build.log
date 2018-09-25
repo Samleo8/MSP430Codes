@@ -13,11 +13,8 @@ Invoking: MSP430 Compiler
 "../HAL_FR4133LP_Learn_Board.c", line 177: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
 "../HAL_FR4133LP_Learn_Board.c", line 180: remark #1545-D: (ULP 14.1) Array index of type "int". Recommend using "unsigned int"
 "../HAL_FR4133LP_Learn_Board.c", line 187: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
-Finished building: "../HAL_FR4133LP_Learn_Board.c"
- 
-Building file: "../FR4133_IR_BP_Learn.c"
-Invoking: MSP430 Compiler
-"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/IR_Learning_Mode" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="FR4133_IR_BP_Learn.d_raw"  "../FR4133_IR_BP_Learn.c"
+"../HAL_FR4133LP_LCD.c", line 124: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
+"../HAL_FR4133LP_LCD.c", line 138: remark #2553-D: (ULP 14.1) Array index (involving "pos") of type "int". Recommend using "unsigned int"
 "../FR4133_IR_BP_Learn.c", line 119: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
 "../FR4133_IR_BP_Learn.c", line 150: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
 "../FR4133_IR_BP_Learn.c", line 240: remark #1544-D: (ULP 13.1) Detected loop counting up. Recommend loops count down as detecting zeros is easier
@@ -28,6 +25,16 @@ Invoking: MSP430 Compiler
 "../FR4133_IR_BP_Learn.c", line 271: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function Buttons_startWDT. Recommend moving function call away from ISR, or inlining the function, or using pragmas
 "../FR4133_IR_BP_Learn.c", line 272: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function scan_key. Recommend moving function call away from ISR, or inlining the function, or using pragmas
 "../FR4133_IR_BP_Learn.c", line 273: remark #1538-D: (ULP 10.1) ISR PORT2_ISR calls function IR_Mode_Setting. Recommend moving function call away from ISR, or inlining the function, or using pragmas
+Finished building: "../HAL_FR4133LP_Learn_Board.c"
+ 
+Building file: "../HAL_FR4133LP_LCD.c"
+Invoking: MSP430 Compiler
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/IR_Learning_Mode" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="HAL_FR4133LP_LCD.d_raw"  "../HAL_FR4133LP_LCD.c"
+Finished building: "../HAL_FR4133LP_LCD.c"
+ 
+Building file: "../FR4133_IR_BP_Learn.c"
+Invoking: MSP430 Compiler
+"/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/bin/cl430" -vmspx --use_hw_mpy=none --include_path="/Applications/ti/ccsv8/ccs_base/msp430/include" --include_path="/Users/sam/Documents/Electronics/MC Codes/IR_Learning_Mode" --include_path="/Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR4133__ -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="FR4133_IR_BP_Learn.d_raw"  "../FR4133_IR_BP_Learn.c"
 Finished building: "../FR4133_IR_BP_Learn.c"
  
 Building target: "IR_Learning_Mode.out"

@@ -35,16 +35,8 @@ unsigned char buttonDebounce = BUTTON_READY;
  *      - Compress the format by which it is sent?
  */
 
-//Appliance modes
-const char* MODE_NAMES[] = { "AIRCON", "TV 1", "TV 2" };
-enum MODES {
-    AIRCON,
-    TV1,
-    TV2
-} mode = AIRCON;
-
-#define TOTAL_MODES 1
 #define TOTAL_CODES 14
+#define MAX_IR_CNT 255
 
 //IR mode/status
 enum IR_STATE {
@@ -59,12 +51,8 @@ unsigned char   code_num = 0;
 boolean copy_mode;
 
 //RX,TX and Timer Counters
-unsigned char MAX_IR_CNT = 0;
-#define MAX_IR_CNT_AC 255
-#define MAX_IR_CNT_TV 64
-
 #pragma PERSISTENT(rx_cnt);     //store rx_cnt in FRAM | TODO: Better partition memory
-unsigned char    rx_cnt[TOTAL_MODES][TOTAL_CODES]={0}; //received bit counter (unsigned char is good enough since the max size of the count is 255
+unsigned char    rx_cnt[TOTAL_CODES]={0}; //received bit counter (unsigned char is good enough since the max size of the count is 255
 unsigned char    tx_cnt=1;          //transmitted bit counter
 
 unsigned int    old_cnt=0;      //old timer counter
@@ -77,13 +65,11 @@ unsigned int    old_cnt=0;      //old timer counter
  *          (2 bytes for unsigned int, 255 maximum entries per code_num and 14 TOTAL_CODES)
  *       This ensures that when writing the IR signals, they don't override that of another mode.
  */
+#pragma PERSISTENT(tx_data);
+unsigned int tx_data[TOTAL_CODES][MAX_IR_CNT] = {0};
 
-#pragma PERSISTENT(tx_data_aircon);
-unsigned int tx_data_aircon[TOTAL_CODES][MAX_IR_CNT_AC] = {0};
-//unsigned int tx_data_tv[TOTAL_MODES-1][TOTAL_CODES][MAX_IR_CNT_TV] = {0};
-
-unsigned int *FRAM_write_ptr = (unsigned int *)(&tx_data_aircon[0][0]);
-unsigned int *FRAM_read_ptr  = (unsigned int *)(&tx_data_aircon[0][0]);
+unsigned int *FRAM_write_ptr = (unsigned int *)(&tx_data[0]);
+unsigned int *FRAM_read_ptr  = (unsigned int *)(&tx_data[0]);
 
 int main(void){
     WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
@@ -107,9 +93,6 @@ int main(void){
 
     copy_mode = FALSE;
     IR_status = DISABLED;
-    mode = AIRCON;
-
-    LCD_Text( (char *)(MODE_NAMES[mode]) );
 
     while(1) {
         if(copy_mode == TRUE){
@@ -197,7 +180,6 @@ int main(void){
         if(IR_status == DISABLED){
             //Idle
             //__delay_cycles(1600000);
-            LCD_Text( (char*)(MODE_NAMES[mode]) );
         }
 
         __bis_SR_register(LPM3_bits | GIE);     //enter low power mode
@@ -229,29 +211,16 @@ void IR_Mode_Setting(){
 
         if(copy_mode == TRUE){  //copy mode => Perform copy
             P4OUT |= (BIT0);
-
-            switch(mode){
-                case AIRCON:
-                    FRAM_write_ptr = &tx_data_aircon[code_num][0];
-                    //TODO: Set an alternative for AC power off and on
-                    break;
-                case TV1:
-                    //FRAM_write_ptr = &tx_data_tv[0][code_num][0];
-                    break;
-                case TV2:
-                    //FRAM_write_ptr = &tx_data_tv[1][code_num][0];
-                    break;
-                default: return;
-            }
+            FRAM_write_ptr = &tx_data[code_num][0];
 
             SYSCFG0 &= ~PFWP;
-            rx_cnt[mode][code_num] = 0;
+            rx_cnt[code_num] = 0;
             SYSCFG0 |= PFWP;
 
             IR_status = RECEIVING;
         }
         else{ //transmit mode => Perform transmit
-            if(rx_cnt[mode][code_num] > 0) {  // valid IR code
+            if(rx_cnt[code_num] > 0) {  // valid IR code
                 LCD_IR_Buttons(button_num);
                 IR_status = TRANSMITTING;
             }
@@ -260,19 +229,7 @@ void IR_Mode_Setting(){
                 IR_status = DISABLED;
             }
 
-            switch(mode){
-                case AIRCON:
-                    FRAM_read_ptr = &tx_data_aircon[code_num][0];
-                    //TODO: Set an alternative for AC power off and on
-                    break;
-                case TV1:
-                    //FRAM_read_ptr = &tx_data_tv[0][code_num][0];
-                    break;
-                case TV2:
-                    //FRAM_read_ptr = &tx_data_tv[1][code_num][0];
-                    break;
-                default: return;
-            }
+            FRAM_read_ptr = &tx_data[code_num][0];
         }
     }
     else{
@@ -379,9 +336,6 @@ __interrupt void PORT1_ISR(void)
 
                 copy_mode = FALSE;
                 IR_status = DISABLED;
-
-                mode++;
-                if(mode>=TOTAL_MODES) mode = 0;
             }
             __bic_SR_register_on_exit(LPM3_bits); //exit LPM3
             break;
@@ -432,11 +386,6 @@ __interrupt void PORT2_ISR(void)
 
                 copy_mode = FALSE;
                 IR_status = DISABLED;
-
-                mode++;
-                if(mode>=TOTAL_MODES) mode = 0;
-
-                //LCD_Text( (char*)(MODE_NAMES[mode]) );
             }
             __bic_SR_register_on_exit(LPM3_bits); //exit LPM3
             break;
@@ -468,7 +417,7 @@ __interrupt void TIMER0_A0_ISR (void)
     switch( TA0IV )
     {
         case TA0IV_NONE:
-            if(tx_cnt < rx_cnt[mode][code_num]){ //Transmitting
+            if(tx_cnt < rx_cnt[code_num]){ //Transmitting
                 P4OUT |= BIT0;
 
                 TA0CCTL2 ^= OUT;
@@ -500,17 +449,9 @@ __interrupt void TIMER0_A1_ISR (void) {
             break;
         case TA0IV_TACCR2: //TA0.2
             if(IR_status == RECEIVING) {
-                switch(mode){
-                    case AIRCON:
-                        MAX_IR_CNT = MAX_IR_CNT_AC;
-                        break;
-                    case TV1: case TV2:
-                        MAX_IR_CNT = MAX_IR_CNT_TV;
-                }
-
-                if(rx_cnt[mode][code_num] < MAX_IR_CNT){
+                if(rx_cnt[code_num] < MAX_IR_CNT){
                     SYSCFG0 &= ~PFWP;
-                    rx_cnt[mode][code_num]++;
+                    rx_cnt[code_num]++;
                     SYSCFG0 |= PFWP;
 
                     SYSCFG0 &= ~PFWP;

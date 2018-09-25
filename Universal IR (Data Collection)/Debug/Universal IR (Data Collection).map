@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker Unix v18.1.1                   
 ******************************************************************************
->> Linked Mon Sep 24 15:04:22 2018
+>> Linked Mon Sep 24 15:12:26 2018
 
-OUTPUT FILE NAME:   <IR_Learning_Mode.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000cee8
+OUTPUT FILE NAME:   <Universal IR (Data Collection).out>
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000ec1a
 
 
 MEMORY CONFIGURATION
@@ -15,8 +15,8 @@ MEMORY CONFIGURATION
   PERIPHERALS_8BIT      00000010   000000f0  00000000  000000f0  RWIX
   PERIPHERALS_16BIT     00000100   00000100  00000000  00000100  RWIX
   INFOA                 00001800   00000200  00000000  00000200  RWIX
-  RAM                   00002000   00000800  000000b2  0000074e  RWIX
-  FRAM                  0000c400   00003b80  00000b8e  00002ff2  RWIX
+  RAM                   00002000   00000800  000000ae  00000752  RWIX
+  FRAM                  0000c400   00003b80  00002894  000012ec  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   INT00                 0000ff88   00000002  00000000  00000002  RWIX
@@ -86,127 +86,128 @@ SECTION ALLOCATION MAP
  output                                  attributes/
 section   page    origin      length       input sections
 --------  ----  ----------  ----------   ----------------
-.data      0    00002000    00000010     UNINITIALIZED
-                  00002000    0000000e     FR4133_IR_BP_Learn.obj (.data)
-                  0000200e    00000002     HAL_FR4133LP_Learn_Board.obj (.data)
+.data      0    00002000    0000000c     UNINITIALIZED
+                  00002000    0000000a     main.obj (.data)
+                  0000200a    00000002     IR_Board.obj (.data)
 
 .TI.persistent 
-*          0    0000c400    0000001c     
-                  0000c400    0000001c     FR4133_IR_BP_Learn.obj (.TI.persistent:rx_cnt)
+*          0    0000c400    00001bf2     
+                  0000c400    00001be4     main.obj (.TI.persistent:tx_data)
+                  0000dfe4    0000000e     main.obj (.TI.persistent:rx_cnt)
 
-.cio       0    0000c41c    00000000     UNINITIALIZED
+.cinit     0    0000dff2    00000036     
+                  0000dff2    00000012     (.cinit..data.load) [load image]
+                  0000e006    0000000c     (__TI_handler_table)
+                  0000e012    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000e018    00000010     (__TI_cinit_table)
 
-.sysmem    0    0000c41c    00000000     UNINITIALIZED
+.pinit     0    0000e028    00000000     UNINITIALIZED
 
-.cinit     0    0000c41c    00000032     
-                  0000c41c    0000000f     (.cinit..data.load) [load image, compression = lzss]
-                  0000c42b    00000001     --HOLE-- [fill = 0]
-                  0000c42c    0000000c     (__TI_handler_table)
-                  0000c438    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  0000c43e    00000010     (__TI_cinit_table)
-
-.pinit     0    0000c44e    00000000     UNINITIALIZED
+.binit     0    0000e028    00000000     
 
 .init_array 
-*          0    0000c44e    00000000     UNINITIALIZED
+*          0    0000e028    00000000     UNINITIALIZED
 
 .mspabi.exidx 
-*          0    0000c44e    00000000     UNINITIALIZED
+*          0    0000e028    00000000     UNINITIALIZED
 
 .mspabi.extab 
-*          0    0000c44e    00000000     UNINITIALIZED
+*          0    0000e028    00000000     UNINITIALIZED
 
-.const     0    0000c44e    00000042     
-                  0000c44e    00000038     HAL_FR4133LP_LCD.obj (.const:alphabet)
-                  0000c486    0000000a     HAL_FR4133LP_LCD.obj (.const:.string:digit)
+.const     0    0000e028    00000059     
+                  0000e028    00000038     LCD.obj (.const:alphabet)
+                  0000e060    00000010     main.obj (.const:.string)
+                  0000e070    0000000a     LCD.obj (.const:.string:digit)
+                  0000e07a    00000007     LCD.obj (.const:.string:POS)
 
-.text      0    0000c490    00000afe     
-                  0000c490    00000214     HAL_FR4133LP_LCD.obj (.text:LCD_Display_Buttons)
-                  0000c6a4    0000016a     FR4133_IR_BP_Learn.obj (.text:IR_Mode_Setting)
-                  0000c80e    00000138     HAL_FR4133LP_Learn_Board.obj (.text:scan_key)
-                  0000c946    00000120     FR4133_IR_BP_Learn.obj (.text:main)
-                  0000ca66    000000ee     rts430x_lc_sd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  0000cb54    0000006c     HAL_FR4133LP_Learn_Board.obj (.text:Init_keypadIO)
-                  0000cbc0    0000006a     rts430x_lc_sd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
-                  0000cc2a    00000060     FR4133_IR_BP_Learn.obj (.text:_isr:TIMER0_A1_ISR)
-                  0000cc8a    00000050     HAL_FR4133LP_Learn_Board.obj (.text:Init_Clock)
-                  0000ccda    0000004c     HAL_FR4133LP_Learn_Board.obj (.text:Init_GPIO)
-                  0000cd26    00000048     HAL_FR4133LP_LCD.obj (.text:Init_LCD)
-                  0000cd6e    00000040     rts430x_lc_sd_eabi.lib : cpy_util.asm.obj (.text:__memcpy_far)
-                  0000cdae    00000040     FR4133_IR_BP_Learn.obj (.text:_isr:TIMER0_A0_ISR)
-                  0000cdee    0000003e     rts430x_lc_sd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  0000ce2c    0000003c                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  0000ce68    0000002c     FR4133_IR_BP_Learn.obj (.text:BlinkLED)
-                  0000ce94    0000002a     FR4133_IR_BP_Learn.obj (.text:_isr:PORT1_ISR)
-                  0000cebe    0000002a     FR4133_IR_BP_Learn.obj (.text:_isr:PORT2_ISR)
-                  0000cee8    0000001c     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
-                  0000cf04    0000001a     HAL_FR4133LP_LCD.obj (.text:LCD_Display_letter)
-                  0000cf1e    0000001a     HAL_FR4133LP_Learn_Board.obj (.text:_isr:WDT_ISR)
-                  0000cf38    00000018     HAL_FR4133LP_LCD.obj (.text:LCD_Clear)
-                  0000cf50    00000010     HAL_FR4133LP_Learn_Board.obj (.text:Buttons_startWDT)
-                  0000cf60    0000000e     HAL_FR4133LP_LCD.obj (.text:LCD_Display_TX)
-                  0000cf6e    0000000c     HAL_FR4133LP_LCD.obj (.text:LCD_Display_digit)
-                  0000cf7a    00000008     rts430x_lc_sd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
-                  0000cf82    00000006                            : exit.c.obj (.text:abort)
-                  0000cf88    00000004                            : pre_init.c.obj (.text:_system_pre_init)
-                  0000cf8c    00000002                            : startup.c.obj (.text:_system_post_cinit)
+.text      0    0000e082    00000c12     
+                  0000e082    000001dc     LCD.obj (.text:LCD_IR_Buttons)
+                  0000e25e    00000122     IR_Board.obj (.text:scan_key)
+                  0000e380    000000f2     main.obj (.text:main)
+                  0000e472    000000ee     rts430x_lc_sd_eabi_se.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  0000e560    000000ce     LCD.obj (.text:LCD_Letter)
+                  0000e62e    000000c6     main.obj (.text:IR_Mode_Setting)
+                  0000e6f4    000000bc     LCD.obj (.text:LCD_Text)
+                  0000e7b0    0000008e     main.obj (.text:Init_GPIO)
+                  0000e83e    0000006a     rts430x_lc_sd_eabi_se.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
+                  0000e8a8    00000068     main.obj (.text:_isr:PORT1_ISR)
+                  0000e910    00000066     IR_Board.obj (.text:Init_KeypadIO)
+                  0000e976    00000062     main.obj (.text:_isr:PORT2_ISR)
+                  0000e9d8    00000060     main.obj (.text:_isr:TIMER0_A1_ISR)
+                  0000ea38    00000050     main.obj (.text:Init_Clock)
+                  0000ea88    00000050     LCD.obj (.text:LCD_Init)
+                  0000ead8    0000004c     main.obj (.text:_isr:TIMER0_A0_ISR)
+                  0000eb24    00000040     rts430x_lc_sd_eabi_se.lib : cpy_util.asm.obj (.text:__memcpy_far)
+                  0000eb64    0000003e                               : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  0000eba2    0000003c                               : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  0000ebde    0000001e     main.obj (.text:_isr:TIMER1_A0_ISR)
+                  0000ebfc    0000001e     IR_Board.obj (.text:_isr:WDT_ISR)
+                  0000ec1a    0000001c     rts430x_lc_sd_eabi_se.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
+                  0000ec36    0000001a     LCD.obj (.text:LCD_Clear)
+                  0000ec50    00000014     rts430x_lc_sd_eabi_se.lib : mult16.asm.obj (.text)
+                  0000ec64    00000010     IR_Board.obj (.text:Buttons_startWDT)
+                  0000ec74    0000000c     LCD.obj (.text:LCD_Digit)
+                  0000ec80    00000008     rts430x_lc_sd_eabi_se.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+                  0000ec88    00000006                               : exit.c.obj (.text:abort)
+                  0000ec8e    00000004                               : pre_init.c.obj (.text:_system_pre_init)
+                  0000ec92    00000002                               : startup.c.obj (.text:_system_post_cinit)
 
-.bss       0    00002010    00000002     UNINITIALIZED
-                  00002010    00000001     (.common:IR_stop)
-                  00002011    00000001     (.common:button_num)
+.bss       0    0000200c    00000002     UNINITIALIZED
+                  0000200c    00000001     (.common:IR_status)
+                  0000200d    00000001     (.common:copy_mode)
 
 .stack     0    00002760    000000a0     UNINITIALIZED
-                  00002760    00000002     rts430x_lc_sd_eabi.lib : boot.c.obj (.stack)
+                  00002760    00000002     rts430x_lc_sd_eabi_se.lib : boot.c.obj (.stack)
                   00002762    0000009e     --HOLE--
 
 LCD_E      0    0000ffe2    00000002     
-                  0000ffe2    00000002     rts430x_lc_sd_eabi.lib : int45.asm.obj (.int45)
+                  0000ffe2    00000002     rts430x_lc_sd_eabi_se.lib : int45.asm.obj (.int45)
 
 PORT2      0    0000ffe4    00000002     
-                  0000ffe4    00000002     FR4133_IR_BP_Learn.obj (.int46)
+                  0000ffe4    00000002     main.obj (.int46)
 
 PORT1      0    0000ffe6    00000002     
-                  0000ffe6    00000002     FR4133_IR_BP_Learn.obj (.int47)
+                  0000ffe6    00000002     main.obj (.int47)
 
 ADC        0    0000ffe8    00000002     
-                  0000ffe8    00000002     rts430x_lc_sd_eabi.lib : int48.asm.obj (.int48)
+                  0000ffe8    00000002     rts430x_lc_sd_eabi_se.lib : int48.asm.obj (.int48)
 
 USCI_B0    0    0000ffea    00000002     
-                  0000ffea    00000002     rts430x_lc_sd_eabi.lib : int49.asm.obj (.int49)
+                  0000ffea    00000002     rts430x_lc_sd_eabi_se.lib : int49.asm.obj (.int49)
 
 USCI_A0    0    0000ffec    00000002     
-                  0000ffec    00000002     rts430x_lc_sd_eabi.lib : int50.asm.obj (.int50)
+                  0000ffec    00000002     rts430x_lc_sd_eabi_se.lib : int50.asm.obj (.int50)
 
 WDT        0    0000ffee    00000002     
-                  0000ffee    00000002     HAL_FR4133LP_Learn_Board.obj (.int51)
+                  0000ffee    00000002     IR_Board.obj (.int51)
 
 RTC        0    0000fff0    00000002     
-                  0000fff0    00000002     rts430x_lc_sd_eabi.lib : int52.asm.obj (.int52)
+                  0000fff0    00000002     rts430x_lc_sd_eabi_se.lib : int52.asm.obj (.int52)
 
 TIMER1_A1 
 *          0    0000fff2    00000002     
-                  0000fff2    00000002     rts430x_lc_sd_eabi.lib : int53.asm.obj (.int53)
+                  0000fff2    00000002     rts430x_lc_sd_eabi_se.lib : int53.asm.obj (.int53)
 
 TIMER1_A0 
 *          0    0000fff4    00000002     
-                  0000fff4    00000002     rts430x_lc_sd_eabi.lib : int54.asm.obj (.int54)
+                  0000fff4    00000002     main.obj (.int54)
 
 TIMER0_A1 
 *          0    0000fff6    00000002     
-                  0000fff6    00000002     FR4133_IR_BP_Learn.obj (.int55)
+                  0000fff6    00000002     main.obj (.int55)
 
 TIMER0_A0 
 *          0    0000fff8    00000002     
-                  0000fff8    00000002     FR4133_IR_BP_Learn.obj (.int56)
+                  0000fff8    00000002     main.obj (.int56)
 
 UNMI       0    0000fffa    00000002     
-                  0000fffa    00000002     rts430x_lc_sd_eabi.lib : int57.asm.obj (.int57)
+                  0000fffa    00000002     rts430x_lc_sd_eabi_se.lib : int57.asm.obj (.int57)
 
 SYSNMI     0    0000fffc    00000002     
-                  0000fffc    00000002     rts430x_lc_sd_eabi.lib : int58.asm.obj (.int58)
+                  0000fffc    00000002     rts430x_lc_sd_eabi_se.lib : int58.asm.obj (.int58)
 
 .reset     0    0000fffe    00000002     
-                  0000fffe    00000002     rts430x_lc_sd_eabi.lib : boot.c.obj (.reset)
+                  0000fffe    00000002     rts430x_lc_sd_eabi_se.lib : boot.c.obj (.reset)
 
 $fill000   0    0000ff80    00000004     
                   0000ff80    00000004     --HOLE-- [fill = ffff]
@@ -216,54 +217,54 @@ $fill001   0    0000ff84    00000004
 
 MODULE SUMMARY
 
-       Module                         code   ro data   rw data
-       ------                         ----   -------   -------
+       Module                       code   ro data   rw data
+       ------                       ----   -------   -------
     ./
-       FR4133_IR_BP_Learn.obj         938    8         44     
-       HAL_FR4133LP_LCD.obj           680    66        0      
-       HAL_FR4133LP_Learn_Board.obj   618    2         2      
-    +--+------------------------------+------+---------+---------+
-       Total:                         2236   76        46     
-                                                              
-    /Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib/rts430x_lc_sd_eabi.lib
-       copy_decompress_lzss.c.obj     238    0         0      
-       autoinit.c.obj                 106    0         0      
-       cpy_util.asm.obj               64     0         0      
-       copy_zero_init.c.obj           62     0         0      
-       copy_decompress_none.c.obj     60     0         0      
-       boot.c.obj                     28     2         0      
-       isr_trap.asm.obj               8      0         0      
-       exit.c.obj                     6      0         0      
-       pre_init.c.obj                 4      0         0      
-       int45.asm.obj                  0      2         0      
-       int48.asm.obj                  0      2         0      
-       int49.asm.obj                  0      2         0      
-       int50.asm.obj                  0      2         0      
-       int52.asm.obj                  0      2         0      
-       int53.asm.obj                  0      2         0      
-       int54.asm.obj                  0      2         0      
-       int57.asm.obj                  0      2         0      
-       int58.asm.obj                  0      2         0      
-       startup.c.obj                  2      0         0      
-    +--+------------------------------+------+---------+---------+
-       Total:                         578    20        0      
-                                                              
-       Stack:                         0      0         160    
-       Linker Generated:              0      49        0      
-    +--+------------------------------+------+---------+---------+
-       Grand Total:                   2814   145       206    
+       main.obj                     1066   26        7166   
+       LCD.obj                      988    73        0      
+       IR_Board.obj                 438    2         2      
+    +--+----------------------------+------+---------+---------+
+       Total:                       2492   101       7168   
+                                                            
+    /Applications/ti/ccsv8/tools/compiler/ti-cgt-msp430_18.1.1.LTS/lib/rts430x_lc_sd_eabi_se.lib
+       copy_decompress_lzss.c.obj   238    0         0      
+       autoinit.c.obj               106    0         0      
+       cpy_util.asm.obj             64     0         0      
+       copy_zero_init.c.obj         62     0         0      
+       copy_decompress_none.c.obj   60     0         0      
+       boot.c.obj                   28     2         0      
+       mult16.asm.obj               20     0         0      
+       isr_trap.asm.obj             8      0         0      
+       exit.c.obj                   6      0         0      
+       pre_init.c.obj               4      0         0      
+       int45.asm.obj                0      2         0      
+       int48.asm.obj                0      2         0      
+       int49.asm.obj                0      2         0      
+       int50.asm.obj                0      2         0      
+       int52.asm.obj                0      2         0      
+       int53.asm.obj                0      2         0      
+       int57.asm.obj                0      2         0      
+       int58.asm.obj                0      2         0      
+       startup.c.obj                2      0         0      
+    +--+----------------------------+------+---------+---------+
+       Total:                       598    18        0      
+                                                            
+       Stack:                       0      0         160    
+       Linker Generated:            0      52        0      
+    +--+----------------------------+------+---------+---------+
+       Grand Total:                 3090   171       7328   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0000c43e records: 2, size/record: 8, table size: 16
-	.data: load addr=0000c41c, load size=0000000f bytes, run addr=00002000, run size=00000010 bytes, compression=lzss
-	.bss: load addr=0000c438, load size=00000006 bytes, run addr=00002010, run size=00000002 bytes, compression=zero_init
+__TI_cinit_table @ 0000e018 records: 2, size/record: 8, table size: 16
+	.data: load addr=0000dff2, load size=00000012 bytes, run addr=00002000, run size=0000000c bytes, compression=copy
+	.bss: load addr=0000e012, load size=00000006 bytes, run addr=0000200c, run size=00000002 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000c42c records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 0000e006 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_lzss
 	index: 2, handler: __TI_decompress_none
@@ -351,9 +352,8 @@ address   name
 00000672  BAKMEM9                                
 00000673  BAKMEM9_H                              
 00000672  BAKMEM9_L                              
-0000ce68  BlinkLED                               
-0000cf50  Buttons_startWDT                       
-0000cf82  C$$EXIT                                
+0000ec64  Buttons_startWDT                       
+0000ec88  C$$EXIT                                
 000002ee  CAPTIO0CTL                             
 000002ef  CAPTIO0CTL_H                           
 000002ee  CAPTIO0CTL_L                           
@@ -396,8 +396,8 @@ address   name
 00000190  CSCTL8                                 
 00000191  CSCTL8_H                               
 00000190  CSCTL8_L                               
-0000200c  FRAM_read_ptr                          
-0000200a  FRAM_write_ptr                         
+00002008  FRAM_read_ptr                          
+00002006  FRAM_write_ptr                         
 000001a0  FRCTL0                                 
 000001a1  FRCTL0_H                               
 000001a0  FRCTL0_L                               
@@ -407,12 +407,11 @@ address   name
 000001a6  GCCTL1                                 
 000001a7  GCCTL1_H                               
 000001a6  GCCTL1_L                               
-0000c6a4  IR_Mode_Setting                        
-00002010  IR_stop                                
-0000cc8a  Init_Clock                             
-0000ccda  Init_GPIO                              
-0000cd26  Init_LCD                               
-0000cb54  Init_keypadIO                          
+0000e62e  IR_Mode_Setting                        
+0000200c  IR_status                              
+0000ea38  Init_Clock                             
+0000e7b0  Init_GPIO                              
+0000e910  Init_KeypadIO                          
 00000604  LCDBLKCTL                              
 00000605  LCDBLKCTL_H                            
 00000604  LCDBLKCTL_L                            
@@ -537,11 +536,12 @@ address   name
 00000608  LCDVCTL                                
 00000609  LCDVCTL_H                              
 00000608  LCDVCTL_L                              
-0000cf38  LCD_Clear                              
-0000c490  LCD_Display_Buttons                    
-0000cf60  LCD_Display_TX                         
-0000cf6e  LCD_Display_digit                      
-0000cf04  LCD_Display_letter                     
+0000ec36  LCD_Clear                              
+0000ec74  LCD_Digit                              
+0000e082  LCD_IR_Buttons                         
+0000ea88  LCD_Init                               
+0000e560  LCD_Letter                             
+0000e6f4  LCD_Text                               
 0000020e  P1IV                                   
 0000021e  P2IV                                   
 00000204  PADIR                                  
@@ -631,8 +631,8 @@ address   name
 0000012a  PMMIFG                                 
 0000012b  PMMIFG_H                               
 0000012a  PMMIFG_L                               
-0000ce94  PORT1_ISR                              
-0000cebe  PORT2_ISR                              
+0000e8a8  PORT1_ISR                              
+0000e976  PORT2_ISR                              
 000003cc  RTCCNT                                 
 000003cd  RTCCNT_H                               
 000003cc  RTCCNT_L                               
@@ -716,8 +716,9 @@ address   name
 00000360  TA1EX0                                 
 0000036e  TA1IV                                  
 00000350  TA1R                                   
-0000cdae  TIMER0_A0_ISR                          
-0000cc2a  TIMER0_A1_ISR                          
+0000ead8  TIMER0_A0_ISR                          
+0000e9d8  TIMER0_A1_ISR                          
+0000ebde  TIMER1_A0_ISR                          
 00000510  UCA0ABCTL                              
 00000506  UCA0BRW                                
 00000507  UCA0BRW_H                              
@@ -800,17 +801,17 @@ address   name
 000001cc  WDTCTL                                 
 000001cd  WDTCTL_H                               
 000001cc  WDTCTL_L                               
-0000cf1e  WDT_ISR                                
+0000ebfc  WDT_ISR                                
 00002800  __STACK_END                            
 000000a0  __STACK_SIZE                           
-0000c43e  __TI_CINIT_Base                        
-0000c44e  __TI_CINIT_Limit                       
-0000c42c  __TI_Handler_Table_Base                
-0000c438  __TI_Handler_Table_Limit               
-0000cf7a  __TI_ISR_TRAP                          
-0000cbc0  __TI_auto_init_nobinit_nopinit_hold_wdt
-0000ca66  __TI_decompress_lzss                   
-0000ce2c  __TI_decompress_none                   
+0000e018  __TI_CINIT_Base                        
+0000e028  __TI_CINIT_Limit                       
+0000e006  __TI_Handler_Table_Base                
+0000e012  __TI_Handler_Table_Limit               
+0000ec80  __TI_ISR_TRAP                          
+0000e83e  __TI_auto_init_nobinit_nopinit_hold_wdt
+0000e472  __TI_decompress_lzss                   
+0000eba2  __TI_decompress_none                   
 0000ffe2  __TI_int45                             
 0000ffe4  __TI_int46                             
 0000ffe6  __TI_int47                             
@@ -828,29 +829,29 @@ address   name
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
-0000cdee  __TI_zero_init_nomemset                
+0000eb64  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
-0000cd6e  __memcpy_far                           
-0000cee8  _c_int00_noargs                        
+0000eb24  __memcpy_far                           
+0000ec50  __mspabi_mpyi                          
+0000ec50  __mspabi_mpyi_sw                       
+0000ec1a  _c_int00_noargs                        
 0000fffe  _reset_vector                          
 00002760  _stack                                 
-0000cf8c  _system_post_cinit                     
-0000cf88  _system_pre_init                       
-0000cf82  abort                                  
-0000c44e  alphabet                               
-0000200f  buttonDebounce                         
-00002011  button_num                             
-00002000  code_num                               
-00002001  copy_mode                              
-0000c486  digit                                  
-0000200e  key_num                                
-0000c946  main                                   
-00002004  new_cnt                                
-00002006  old_cnt                                
-0000c400  rx_cnt                                 
-0000c80e  scan_key                               
-00002008  time_cnt                               
-00002002  tx_cnt                                 
+0000ec92  _system_post_cinit                     
+0000ec8e  _system_pre_init                       
+0000ec88  abort                                  
+00002001  buttonDebounce                         
+00002000  button_num                             
+00002002  code_num                               
+0000200b  compare                                
+0000200d  copy_mode                              
+0000200a  key_num                                
+0000e380  main                                   
+00002004  old_cnt                                
+0000dfe4  rx_cnt                                 
+0000e25e  scan_key                               
+00002003  tx_cnt                                 
+0000c400  tx_data                                
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1365,57 +1366,57 @@ address   name
 0000071e  ADCIV                                  
 0000071e  ADCIV_L                                
 0000071f  ADCIV_H                                
-00002000  code_num                               
-00002001  copy_mode                              
-00002002  tx_cnt                                 
-00002004  new_cnt                                
-00002006  old_cnt                                
-00002008  time_cnt                               
-0000200a  FRAM_write_ptr                         
-0000200c  FRAM_read_ptr                          
-0000200e  key_num                                
-0000200f  buttonDebounce                         
-00002010  IR_stop                                
-00002011  button_num                             
+00002000  button_num                             
+00002001  buttonDebounce                         
+00002002  code_num                               
+00002003  tx_cnt                                 
+00002004  old_cnt                                
+00002006  FRAM_write_ptr                         
+00002008  FRAM_read_ptr                          
+0000200a  key_num                                
+0000200b  compare                                
+0000200c  IR_status                              
+0000200d  copy_mode                              
 00002760  _stack                                 
 00002800  __STACK_END                            
-0000c400  rx_cnt                                 
-0000c42c  __TI_Handler_Table_Base                
-0000c438  __TI_Handler_Table_Limit               
-0000c43e  __TI_CINIT_Base                        
-0000c44e  __TI_CINIT_Limit                       
-0000c44e  alphabet                               
-0000c486  digit                                  
-0000c490  LCD_Display_Buttons                    
-0000c6a4  IR_Mode_Setting                        
-0000c80e  scan_key                               
-0000c946  main                                   
-0000ca66  __TI_decompress_lzss                   
-0000cb54  Init_keypadIO                          
-0000cbc0  __TI_auto_init_nobinit_nopinit_hold_wdt
-0000cc2a  TIMER0_A1_ISR                          
-0000cc8a  Init_Clock                             
-0000ccda  Init_GPIO                              
-0000cd26  Init_LCD                               
-0000cd6e  __memcpy_far                           
-0000cdae  TIMER0_A0_ISR                          
-0000cdee  __TI_zero_init_nomemset                
-0000ce2c  __TI_decompress_none                   
-0000ce68  BlinkLED                               
-0000ce94  PORT1_ISR                              
-0000cebe  PORT2_ISR                              
-0000cee8  _c_int00_noargs                        
-0000cf04  LCD_Display_letter                     
-0000cf1e  WDT_ISR                                
-0000cf38  LCD_Clear                              
-0000cf50  Buttons_startWDT                       
-0000cf60  LCD_Display_TX                         
-0000cf6e  LCD_Display_digit                      
-0000cf7a  __TI_ISR_TRAP                          
-0000cf82  C$$EXIT                                
-0000cf82  abort                                  
-0000cf88  _system_pre_init                       
-0000cf8c  _system_post_cinit                     
+0000c400  tx_data                                
+0000dfe4  rx_cnt                                 
+0000e006  __TI_Handler_Table_Base                
+0000e012  __TI_Handler_Table_Limit               
+0000e018  __TI_CINIT_Base                        
+0000e028  __TI_CINIT_Limit                       
+0000e082  LCD_IR_Buttons                         
+0000e25e  scan_key                               
+0000e380  main                                   
+0000e472  __TI_decompress_lzss                   
+0000e560  LCD_Letter                             
+0000e62e  IR_Mode_Setting                        
+0000e6f4  LCD_Text                               
+0000e7b0  Init_GPIO                              
+0000e83e  __TI_auto_init_nobinit_nopinit_hold_wdt
+0000e8a8  PORT1_ISR                              
+0000e910  Init_KeypadIO                          
+0000e976  PORT2_ISR                              
+0000e9d8  TIMER0_A1_ISR                          
+0000ea38  Init_Clock                             
+0000ea88  LCD_Init                               
+0000ead8  TIMER0_A0_ISR                          
+0000eb24  __memcpy_far                           
+0000eb64  __TI_zero_init_nomemset                
+0000eba2  __TI_decompress_none                   
+0000ebde  TIMER1_A0_ISR                          
+0000ebfc  WDT_ISR                                
+0000ec1a  _c_int00_noargs                        
+0000ec36  LCD_Clear                              
+0000ec50  __mspabi_mpyi                          
+0000ec50  __mspabi_mpyi_sw                       
+0000ec64  Buttons_startWDT                       
+0000ec74  LCD_Digit                              
+0000ec80  __TI_ISR_TRAP                          
+0000ec88  C$$EXIT                                
+0000ec88  abort                                  
+0000ec8e  _system_pre_init                       
+0000ec92  _system_post_cinit                     
 0000ffe2  __TI_int45                             
 0000ffe4  __TI_int46                             
 0000ffe6  __TI_int47                             

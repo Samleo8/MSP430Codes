@@ -13,7 +13,7 @@ enum MODES {
 #define TOTAL_MODES 3
 
 //IR Codes
-static const unsigned char CODES_TV1_POWER[25] = { 4, 1, 3, 1, 2, 1, 3, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 2, 1, 2 };
+static const unsigned char CODES_TV1_POWER[26] = { 4, 1, 3, 1, 2, 1, 3, 1, 2, 1, 3, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 2, 1, 2, 5 };
 static const unsigned char CODES_TV1_NUMBERS[10][35] = {
     { 5, 3, 1, 3, 1, 6, 2, 3, 1, 4, 2, 6, 2, 4, 2, 3, 1, 3, 1, 6, 2, 6, 2, 4, 2, 6, 2, 3, 1, 3, 1, 3, 1, 3, 1 },
     { 5, 3, 1, 3, 1, 6, 2, 3, 1, 5, 1, 6, 2, 4, 2, 3, 1, 3, 1, 3, 1, 6, 2, 4, 2, 6, 2, 3, 1, 3, 1, 3, 1, 4, 2 },
